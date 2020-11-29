@@ -17,35 +17,6 @@ class AuthData{
   final Map<String, dynamic> userJson;
   final Map<String, String> response;
 
-  String formatResponse(Map<String, String> response){
-    StringBuffer result = StringBuffer('\n');
-
-    for (MapEntry data in response.entries){
-      result.write('\t\t\t\t');
-      result.write(data.key);
-      result.write(' = ');
-      result.write(data.value);
-      result.write('\n');
-    }
-
-    return result.toString();
-  }
-
-  @override
-  String toString() {
-    String responseString = formatResponse(response);
-    return 'AuthData {\n\n'
-        '\t\ttoken: $accessToken\n\n'
-        '\t\tuser id: $userID\n\n'
-        '\t\tfirst name: $firstName\n\n'
-        '\t\tlast name: $lastName\n\n'
-        '\t\temail: $email\n\n'
-        '\t\tprofile image: $profileImgUrl\n\n'
-        '\t\tresponse: $responseString\n'
-        '\t\tuser json: $userJson\n\n'
-        '}';
-  }
-
   factory AuthData.fromTwitchJson(
       Map<String, dynamic> json,
       Map<String, String>data
@@ -105,5 +76,34 @@ class AuthData{
         response: data,
         userJson: json
     );
+  }
+
+  String formatResponse(Map<String, String> response){
+    StringBuffer result = StringBuffer('\n');
+
+    for (MapEntry data in response.entries){
+      result.write('\t\t\t\t');
+      result.write(data.key);
+      result.write(' = ');
+      result.write(data.value);
+      result.write('\n');
+    }
+
+    return result.toString();
+  }
+
+  @override
+  String toString() {
+    String responseString = formatResponse(response);
+    return 'AuthData {\n\n'
+        '\t\ttoken: $accessToken\n\n'
+        '\t\tuser id: $userID\n\n'
+        '\t\tfirst name: $firstName\n\n'
+        '\t\tlast name: $lastName\n\n'
+        '\t\temail: $email\n\n'
+        '\t\tprofile image: $profileImgUrl\n\n'
+        '\t\tresponse: $responseString\n'
+        '\t\tuser json: $userJson\n\n'
+        '}';
   }
 }
