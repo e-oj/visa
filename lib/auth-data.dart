@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'engine/oauth.dart';
 
 class AuthData{
@@ -92,9 +94,15 @@ class AuthData{
     return result.toString();
   }
 
+  String formatJson(Map<String, dynamic> json){
+    JsonEncoder encoder = JsonEncoder.withIndent('    ');
+    return encoder.convert(json);
+  }
+
   @override
   String toString() {
     String responseString = formatResponse(response);
+    String prettyUserJson = formatJson(userJson);
     return 'AuthData {\n\n'
         '\t\ttoken: $accessToken\n\n'
         '\t\tuser id: $userID\n\n'
@@ -103,7 +111,7 @@ class AuthData{
         '\t\temail: $email\n\n'
         '\t\tprofile image: $profileImgUrl\n\n'
         '\t\tresponse: $responseString\n'
-        '\t\tuser json: $userJson\n\n'
+        '\t\tuser json: $prettyUserJson\n\n'
         '}';
   }
 }

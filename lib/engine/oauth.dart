@@ -51,7 +51,7 @@ class OAuth{
       if (!param.contains('=')) continue;
 
       parts = param.split('=');
-      queryParams[parts[0]] = parts[1];
+      queryParams[parts[0]] = Uri.decodeFull(parts[1]);
     }
 
     return queryParams;
