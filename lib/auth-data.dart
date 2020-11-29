@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'engine/oauth.dart';
-
 class AuthData{
   const AuthData({
     this.clientID, this.accessToken, this.firstName, this.lastName,
@@ -19,67 +17,6 @@ class AuthData{
   final Map<String, dynamic> userJson;
   final Map<String, String> response;
 
-  factory AuthData.fromTwitchJson(
-      Map<String, dynamic> json,
-      Map<String, String>data
-  ){
-    final String accessToken = data[OAuth.TOKEN_KEY];
-    Map<String, dynamic> user = json['data'][0];
-
-    return AuthData(
-        clientID: data['clientID'],
-        accessToken: accessToken,
-        userID: user['id'],
-        email: user['email'] as String,
-        profileImgUrl: user['profile_image_url'] as String,
-        response: data,
-        userJson: json
-    );
-  }
-
-  factory AuthData.fromDiscordJson(
-      Map<String, dynamic> json,
-      Map<String, String>data
-  ){
-    final String accessToken = data[OAuth.TOKEN_KEY];
-    final String userId = json['id'] as String;
-    final String avatar = json['avatar'] as String;
-    final String profileImgUrl = 'https://cdn.discordapp.com/'
-        'avatars/$userId/$avatar.png';
-
-    return AuthData(
-        clientID: data['clientID'],
-        accessToken: accessToken,
-        userID: userId,
-        email: json['email'] as String,
-        profileImgUrl: profileImgUrl,
-        response: data,
-        userJson: json
-    );
-  }
-
-  factory AuthData.fromFbJson(
-      Map<String, dynamic> json,
-      Map<String, String>data
-  ){
-    final String accessToken = data[OAuth.TOKEN_KEY];
-    final String profileImgUrl = 'https://graph.facebook.com/me/picture'
-        '?type=large'
-        '&access_token=$accessToken';
-
-    return AuthData(
-        clientID: data['clientID'],
-        accessToken: accessToken,
-        userID: json['id'] as String,
-        firstName: json['first_name'] as String,
-        lastName: json['last_name'] as String,
-        email: json['email'] as String,
-        profileImgUrl: profileImgUrl,
-        response: data,
-        userJson: json
-    );
-  }
-
   String formatResponse(Map<String, String> response){
     StringBuffer result = StringBuffer('\n');
 
@@ -95,14 +32,14 @@ class AuthData{
   }
 
   String formatJson(Map<String, dynamic> json){
-    JsonEncoder encoder = JsonEncoder.withIndent('    ');
-    return encoder.convert(json);
+    return JsonEncoder.withIndent('    ').convert(json);
   }
 
   @override
   String toString() {
     String responseString = formatResponse(response);
     String prettyUserJson = formatJson(userJson);
+
     return 'AuthData {\n\n'
         '\t\ttoken: $accessToken\n\n'
         '\t\tuser id: $userID\n\n'

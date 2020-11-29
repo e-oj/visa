@@ -26,8 +26,31 @@ class FaceBookAuth implements Visa{
               json.decode(profileResponse.body)
           );
 
-          return AuthData.fromFbJson(profileJson, data);
+          return getAuthData(profileJson, data);
         }
+    );
+  }
+
+  @override
+  AuthData getAuthData(
+      Map<String, dynamic> json,
+      Map<String, String>data
+      ){
+    final String accessToken = data[OAuth.TOKEN_KEY];
+    final String profileImgUrl = 'https://graph.facebook.com/me/picture'
+        '?type=large'
+        '&access_token=$accessToken';
+
+    return AuthData(
+        clientID: data['clientID'],
+        accessToken: accessToken,
+        userID: json['id'] as String,
+        firstName: json['first_name'] as String,
+        lastName: json['last_name'] as String,
+        email: json['email'] as String,
+        profileImgUrl: profileImgUrl,
+        response: data,
+        userJson: json
     );
   }
 }

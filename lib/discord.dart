@@ -27,8 +27,30 @@ class DiscordAuth implements Visa{
               json.decode(profileResponse.body)
           );
 
-          return AuthData.fromDiscordJson(profileJson, data);
+          return getAuthData(profileJson, data);
         }
+    );
+  }
+
+  @override
+  AuthData getAuthData(
+      Map<String, dynamic> json,
+      Map<String, String> data
+  ){
+    final String accessToken = data[OAuth.TOKEN_KEY];
+    final String userId = json['id'] as String;
+    final String avatar = json['avatar'] as String;
+    final String profileImgUrl = 'https://cdn.discordapp.com/'
+        'avatars/$userId/$avatar.png';
+
+    return AuthData(
+        clientID: data['clientID'],
+        accessToken: accessToken,
+        userID: userId,
+        email: json['email'] as String,
+        profileImgUrl: profileImgUrl,
+        response: data,
+        userJson: json
     );
   }
 }
