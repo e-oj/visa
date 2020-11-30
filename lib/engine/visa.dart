@@ -5,7 +5,7 @@ import 'simple-auth.dart';
 abstract class Visa{
   SimpleAuth visa;
 
-  AuthData getAuthData(
+  AuthData authData(
       Map<String, dynamic> json,
       Map<String, String>data
   );

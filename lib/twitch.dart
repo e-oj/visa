@@ -28,12 +28,12 @@ class TwitchAuth implements Visa{
               json.decode(profileResponse.body)
           );
 
-          return getAuthData(profileJson, data);
+          return authData(profileJson, data);
         }
     );
   }
 
-  AuthData getAuthData(
+  AuthData authData(
       Map<String, dynamic> json,
       Map<String, String>data
   ){

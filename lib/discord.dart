@@ -27,13 +27,13 @@ class DiscordAuth implements Visa{
               json.decode(profileResponse.body)
           );
 
-          return getAuthData(profileJson, data);
+          return authData(profileJson, data);
         }
     );
   }
 
   @override
-  AuthData getAuthData(
+  AuthData authData(
       Map<String, dynamic> json,
       Map<String, String> data
   ){
