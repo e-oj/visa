@@ -31,6 +31,7 @@ class GithubAuth implements Visa{
               break;
             }
           }
+
           profileJson['email'] = emailString;
           profileJson['emails'] = emailJson;
 
