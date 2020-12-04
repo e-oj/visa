@@ -25,6 +25,7 @@ class OAuth{
   static const String CLIENT_SECRET_KEY = 'clientSecret';
   static const String REDIRECT_URI_KEY = 'redirectURI';
   static const String STATE_KEY = 'state';
+  static const String SCOPE_KEY = 'scope';
 
   WebView authenticate({@required Function onDone}){
     String clientSecretQuery = clientSecret != null

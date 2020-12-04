@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visa/github.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'utils.dart';
@@ -34,7 +35,7 @@ class AuthPage extends StatelessWidget {
     switch(thirdParty){
       case 'fb': return FaceBookAuth().visa.authenticate(
           clientID: '329705311682184',
-          redirectUri: 'https://www.eswagers.com/oauth',
+          redirectUri: 'https://www.e-oj.com/oauth',
           scope: 'public_profile,email',
           state: 'fbAuth',
           onDone: done
@@ -42,7 +43,7 @@ class AuthPage extends StatelessWidget {
 
       case 'twitch': return TwitchAuth().visa.authenticate(
           clientID: 'e4iaw7qsbc7gg0zsrwyobd2o9l5dqq',
-          redirectUri: 'https://www.eswagers.com/oauth',
+          redirectUri: 'https://www.e-oj.com/oauth',
           state: 'twitchAuth',
           scope: 'user:read:email',
           onDone: done
@@ -50,9 +51,18 @@ class AuthPage extends StatelessWidget {
 
       case 'discord': return DiscordAuth().visa.authenticate(
           clientID: '782031829334622208',
-          redirectUri: 'https://www.eswagers.com/oauth',
+          redirectUri: 'https://www.e-oj.com/oauth',
           state: 'discordAuth',
           scope: 'identify email',
+          onDone: done
+      );
+
+      case 'github': return GithubAuth().visa.authenticate(
+          clientID: 'e6a01102910a7a9d694e',
+          clientSecret: 'a532ab8c42e9f884f276846fc7f32e069fc0133d',
+          redirectUri: 'https://www.e-oj.com/oauth',
+          state: 'githubAuth',
+          scope: 'user',
           onDone: done
       );
     }

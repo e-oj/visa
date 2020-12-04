@@ -16,16 +16,10 @@ class DiscordAuth implements Visa{
         getAuthData: (Map <String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
           var baseProfileUrl = 'https://discord.com/api/users/@me';
-
           var profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
-
-          print(profileResponse);
-
-          var profileJson = Map<String, dynamic>.from(
-              json.decode(profileResponse.body)
-          );
+          var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);
         }

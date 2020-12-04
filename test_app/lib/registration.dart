@@ -54,6 +54,15 @@ class _RegistrationPageState extends State<RegistrationPage>{
                         ),
                         onPressed: () => Navigator.pushNamed(context, '/discord-auth')
                     ),
+                    Utils.getButton(
+                        text: 'Sign up with Github',
+                        color: HexColor('#7289DA'),
+                        textColor: Colors.white,
+                        icon: Image.asset(
+                            'assets/discord.png', width: scale.ofHeight(0.0245)
+                        ),
+                        onPressed: () => Navigator.pushNamed(context, '/github-auth')
+                    ),
                   ]
               )
           )
