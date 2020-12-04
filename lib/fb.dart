@@ -22,9 +22,7 @@ class FaceBookAuth implements Visa{
               '&fields=first_name,last_name,email';
 
           var profileResponse = await http.get(profileUrl);
-          var profileJson = Map<String, dynamic>.from(
-              json.decode(profileResponse.body)
-          );
+          var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);
         }

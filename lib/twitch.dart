@@ -24,9 +24,7 @@ class TwitchAuth implements Visa{
 
           print(profileResponse);
 
-          var profileJson = Map<String, dynamic>.from(
-              json.decode(profileResponse.body)
-          );
+          var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);
         }

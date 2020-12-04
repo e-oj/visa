@@ -13,7 +13,7 @@ class SimpleAuth{
   final Function getAuthData;
 
   WebView authenticate({
-    @required String clientID, @required String redirectUri,
+    @required String clientID, String clientSecret, @required String redirectUri,
     @required String state, @required String scope, @required Function onDone
   }){
     final OAuth oAuth = OAuth(
@@ -22,6 +22,7 @@ class SimpleAuth{
       redirectUri: redirectUri,
       state: state,
       scope: scope,
+      clientSecret: clientSecret
     );
 
     return oAuth.authenticate(onDone: (token) async {

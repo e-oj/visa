@@ -9,19 +9,31 @@ class OAuth{
     @required this.clientID,
     @required this.redirectUri,
     @required this.state,
-    @required this.scope
+    @required this.scope,
+    this.clientSecret
   });
 
   final String baseUrl;
   final String clientID;
+  final String clientSecret;
   final String redirectUri;
   final String state;
   final String scope;
   static const String TOKEN_KEY = 'access_token';
+  static const String CODE_KEY = 'code';
+  static const String CLIENT_ID_KEY = 'clientID';
+  static const String CLIENT_SECRET_KEY = 'clientSecret';
+  static const String REDIRECT_URI_KEY = 'redirectURI';
+  static const String STATE_KEY = 'state';
 
   WebView authenticate({@required Function onDone}){
+    String clientSecretQuery = clientSecret != null
+        ? '&client_secret=$clientSecret'
+        : '';
+
     String authUrl = '$baseUrl'
         '?client_id=$clientID'
+        '$clientSecretQuery'
         '&redirect_uri=$redirectUri'
         '&state=$state'
         '&scope=$scope'
@@ -35,7 +47,14 @@ class OAuth{
         onPageStarted: (url) async {
           if (url.startsWith(redirectUri)){
             var returnedData = _getQueryParams(url);
-            returnedData['clientID'] = clientID;
+            returnedData[CLIENT_ID_KEY] = clientID;
+            returnedData[REDIRECT_URI_KEY] = redirectUri;
+            returnedData[STATE_KEY] = state;
+
+            if(clientSecret != null){
+              returnedData[CLIENT_SECRET_KEY] = clientSecret;
+            }
+
             onDone(returnedData);
           }
         }
