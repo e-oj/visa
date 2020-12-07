@@ -34,7 +34,7 @@ class AuthPage extends StatelessWidget {
 
     switch(thirdParty){
       case 'fb': return FaceBookAuth().visa.authenticate(
-          clientID: '329705311682184',
+          clientID: '139732240983759',
           redirectUri: 'https://www.e-oj.com/oauth',
           scope: 'public_profile,email',
           state: 'fbAuth',
@@ -42,7 +42,7 @@ class AuthPage extends StatelessWidget {
       );
 
       case 'twitch': return TwitchAuth().visa.authenticate(
-          clientID: 'e4iaw7qsbc7gg0zsrwyobd2o9l5dqq',
+          clientID: 'fx9d4xcwzswjzwt8cfzj8lh8paphdu',
           redirectUri: 'https://www.e-oj.com/oauth',
           state: 'twitchAuth',
           scope: 'user:read:email',
@@ -50,7 +50,7 @@ class AuthPage extends StatelessWidget {
       );
 
       case 'discord': return DiscordAuth().visa.authenticate(
-          clientID: '782031829334622208',
+          clientID: '785323970999091211',
           redirectUri: 'https://www.e-oj.com/oauth',
           state: 'discordAuth',
           scope: 'identify email',
