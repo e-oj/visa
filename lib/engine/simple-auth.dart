@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -25,8 +26,8 @@ class SimpleAuth{
       clientSecret: clientSecret
     );
 
-    return oAuth.authenticate(onDone: (token) async {
-      AuthData authData = await getAuthData(token);
+    return oAuth.authenticate(onDone: (responseData) async {
+      AuthData authData = await getAuthData(responseData);
       onDone(authData);
     });
   }
