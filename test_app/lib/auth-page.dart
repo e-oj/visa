@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:visa/github.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'utils.dart';
 import 'package:visa/fb.dart';
 import 'package:visa/auth-data.dart';
 import 'package:visa/discord.dart';
 import 'package:visa/twitch.dart';
+import 'package:visa/github.dart';
+import 'package:visa/google.dart';
+
+import 'utils.dart';
 
 class AuthPage extends StatelessWidget {
   AuthPage({Key key, @required this.thirdParty}): super(key: key);
@@ -63,6 +65,15 @@ class AuthPage extends StatelessWidget {
           redirectUri: 'https://www.e-oj.com/oauth',
           state: 'githubAuth',
           scope: 'user',
+          onDone: done
+      );
+
+      case 'google': return GoogleAuth().visa.authenticate(
+          clientID: '463257508739-c03fcu5pej7odrci1tclk53qdd''tsa0vo.apps.googleusercontent.com',
+          redirectUri: 'https://www.e-oj.com/oauth',
+          state: 'googleAuth',
+          scope: 'https://www.googleapis.com/auth/user.emails.read '
+              'https://www.googleapis.com/auth/userinfo.profile',
           onDone: done
       );
     }

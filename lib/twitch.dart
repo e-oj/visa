@@ -16,14 +16,10 @@ class TwitchAuth implements Visa{
         getAuthData: (Map <String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
           var baseProfileUrl = 'https://api.twitch.tv/helix/users';
-
           var profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
             'Client-Id': data['clientID']
           });
-
-          print(profileResponse);
-
           var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);

@@ -26,8 +26,10 @@ class OAuth{
   static const String REDIRECT_URI_KEY = 'redirectURI';
   static const String STATE_KEY = 'state';
   static const String SCOPE_KEY = 'scope';
+  final String userAgent = "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/87.0.4280.86 Mobile Safari/537.36";
 
-  WebView authenticate({@required Function onDone}){
+  WebView authenticate({@required Function onDone}) {
     String clientSecretQuery = clientSecret != null
         ? '&client_secret=$clientSecret'
         : '';
@@ -43,6 +45,7 @@ class OAuth{
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     return WebView(
+        userAgent: userAgent,
         initialUrl: authUrl,
         javascriptMode: JavascriptMode.unrestricted,
         onPageStarted: (url) async {

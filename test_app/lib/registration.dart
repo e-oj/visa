@@ -63,6 +63,12 @@ class _RegistrationPageState extends State<RegistrationPage>{
                         ),
                         onPressed: () => Navigator.pushNamed(context, '/github-auth')
                     ),
+                    Utils.getButton(
+                        text: 'Sign up with Google',
+                        color: HexColor('#4285F4'),
+                        textColor: Colors.white,
+                        onPressed: () => Navigator.pushNamed(context, '/google-auth')
+                    )
                   ]
               )
           )
