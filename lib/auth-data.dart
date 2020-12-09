@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+/// This class contains variables that provide
+/// easy access to the common properties of a
+/// user. It also contains all data from the
+/// authentication response and the user
+/// response in response,
 class AuthData{
   const AuthData({
     this.clientID, this.accessToken, this.firstName, this.lastName,
@@ -17,7 +22,7 @@ class AuthData{
   final Map<String, dynamic> userJson;
   final Map<String, String> response;
 
-  String formatResponse(Map<String, String> response){
+  String _formatResponse(){
     StringBuffer result = StringBuffer('\n');
 
     for (MapEntry data in response.entries){
@@ -31,14 +36,14 @@ class AuthData{
     return result.toString();
   }
 
-  String formatJson(Map<String, dynamic> json){
-    return JsonEncoder.withIndent('    ').convert(json);
+  String _formatJson(){
+    return JsonEncoder.withIndent('    ').convert(userJson);
   }
 
   @override
   String toString() {
-    String responseString = formatResponse(response);
-    String prettyUserJson = formatJson(userJson);
+    String responseString = _formatResponse();
+    String prettyUserJson = _formatJson();
 
     return 'AuthData {\n\n'
         '\t\ttoken: $accessToken\n\n'
