@@ -4,11 +4,21 @@ Easy third party authentication for flutter apps.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+Install the visa package
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## API
+
+### Basic Usage 
+#### AuthProvider().visa.authenticate
+Super simple. Returns a WebView that's been set up for authentication. 
+```dart
+WebView authenticate({
+  bool newSession=false // If true, user has to reenter username and password even if they've logged in before
+  String clientSecret, // Some providers (GitHub for instance) require the OAuth client secret (from developer portal).
+  @required String clientID, // OAuth client ID (from developer portal)
+  @required String redirectUri, // OAuth redirect url (from developer portal) 
+  @required String state, // OAuth state string can be whatever you want.
+  @required String scope, // OAuth scope (Check provider's API docs for allowed scopes)
+  @required Function onDone, // Callback function which expects an AuthData object.
+});
+```
