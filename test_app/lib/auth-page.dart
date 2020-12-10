@@ -69,7 +69,6 @@ class AuthPage extends StatelessWidget {
       );
 
       case 'google': return GoogleAuth().visa.authenticate(
-          newSession: true,
           clientID: '463257508739-c03fcu5pej7odrci1tclk53qdd''tsa0vo.apps.googleusercontent.com',
           redirectUri: 'https://www.e-oj.com/oauth',
           state: 'googleAuth',
