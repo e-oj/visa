@@ -30,8 +30,6 @@ import 'package:visa/fb.dart';
 
 class AuthPage extends StatelessWidget {
   AuthPage({Key key, @required this.thirdParty}): super(key: key);
-
-  final String thirdParty;
   
   @override
   Widget build(BuildContext context) {
