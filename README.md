@@ -1,6 +1,6 @@
 # visa
 
-Easy third party authentication.
+Easy third party authentication for fluuter apps.
 
 ## Getting Started
 
