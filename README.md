@@ -12,7 +12,7 @@ Install the visa package
 #### AuthProvider().visa.authenticate
 Super simple. Returns a WebView that's been set up for authentication. 
 ```dart
-WebView authenticate({
+visa.authenticate({
   bool newSession=false // If true, user has to reenter username and password even if they've logged in before
   String clientSecret, // Some providers (GitHub for instance) require the OAuth client secret (from developer portal).
   @required String clientID, // OAuth client ID (from developer portal)
