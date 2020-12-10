@@ -22,3 +22,44 @@ WebView authenticate({
   @required Function onDone, // Callback function which expects an AuthData object.
 });
 ```
+
+Here's an example:
+```Dart
+import 'package:visa/auth-data.dart';
+import 'package:visa/fb.dart';
+
+class AuthPage extends StatelessWidget {
+  AuthPage({Key key, @required this.thirdParty}): super(key: key);
+
+  final String thirdParty;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar,
+      
+      /// Simply Provide all the necessary credentials
+      body: FaceBookAuth().visa.authenticate(
+          clientID: '139732240983759',
+          redirectUri: 'https://www.e-oj.com/oauth',
+          scope: 'public_profile,email',
+          state: 'fbAuth',
+          onDone: done
+      ),
+    );
+  }
+  
+  done(AuthData authData){
+    print(authData);
+    
+    /// You can pass the [AuthData] object to a 
+    /// post authentication screen. It contaions 
+    /// all the user and OAuth data collected during
+    /// the authentication process.
+    Navigator.pushReplacementNamed(
+        context, '/complete-profile', arguments: authData
+    );
+  };
+}
+
+```
