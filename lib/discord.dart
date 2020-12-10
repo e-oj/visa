@@ -6,13 +6,17 @@ import 'engine/visa.dart';
 import 'auth-data.dart';
 import 'engine/oauth.dart';
 
+/// Enables Discord [OAuth] authentication
 class DiscordAuth implements Visa{
+  // User profile API endpoint.
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
   SimpleAuth visa;
 
   DiscordAuth(){
     visa = SimpleAuth(
         baseUrl: baseUrl,
+        /// Sends a request to the user profile api
+        /// endpoint. Returns an AuthData object.
         getAuthData: (Map <String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
           var baseProfileUrl = 'https://discord.com/api/users/@me';
@@ -26,6 +30,9 @@ class DiscordAuth implements Visa{
     );
   }
 
+  /// This function combines information
+  /// from the user [json] and auth response [data]
+  /// to build an [AuthData] object.
   @override
   AuthData authData(
       Map<String, dynamic> json,

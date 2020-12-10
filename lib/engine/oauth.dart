@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+/// This class contains [OAuth] data and
+/// functionality. It has one public method
+/// that returns a [WebView] which has been set up
+/// for OAuth 2.0 Authentication.
 class OAuth{
   const OAuth({
     @required this.baseUrl,
@@ -13,23 +17,26 @@ class OAuth{
     this.clientSecret
   });
 
-  final String baseUrl;
-  final String clientID;
-  final String clientSecret;
-  final String redirectUri;
-  final String state;
-  final String scope;
-  static const String TOKEN_KEY = 'access_token';
-  static const String CODE_KEY = 'code';
-  static const String CLIENT_ID_KEY = 'clientID';
-  static const String CLIENT_SECRET_KEY = 'clientSecret';
-  static const String REDIRECT_URI_KEY = 'redirectURI';
-  static const String STATE_KEY = 'state';
-  static const String SCOPE_KEY = 'scope';
+  final String baseUrl; // OAuth url
+  final String clientID; // OAuth clientID
+  final String clientSecret; // OAuth clientSecret
+  final String redirectUri; // OAuth redirectUri
+  final String state; // OAuth state
+  final String scope; // OAuth scope
+  static const String TOKEN_KEY = 'access_token'; // OAuth token key
+  static const String CODE_KEY = 'code'; // OAuth code key
+  static const String STATE_KEY = 'state'; // OAuth state key
+  static const String SCOPE_KEY = 'scope'; // OAuth scope key
+  static const String CLIENT_ID_KEY = 'clientID'; // custom client id key
+  static const String CLIENT_SECRET_KEY = 'clientSecret'; // custom client secret key
+  static const String REDIRECT_URI_KEY = 'redirectURI'; // custom redirect uri key
   final String userAgent = "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/87.0.4280.86 Mobile Safari/537.36";
+      "(KHTML, like Gecko) Chrome/87.0.4280.86 Mobile Safari/537.36"; // UA
 
-  WebView authenticate({@required Function onDone}) {
+  /// Sets up a [WebView] for OAuth authentication.
+  /// [onDone] is called when authentication is
+  /// completed successfully.
+  WebView authenticate({@required Function onDone, bool clearCache=false}) {
     String clientSecretQuery = clientSecret != null
         ? '&client_secret=$clientSecret'
         : '';
@@ -45,26 +52,34 @@ class OAuth{
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     return WebView(
-        userAgent: userAgent,
-        initialUrl: authUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        onPageStarted: (url) async {
-          if (url.startsWith(redirectUri)){
-            var returnedData = _getQueryParams(url);
-            returnedData[CLIENT_ID_KEY] = clientID;
-            returnedData[REDIRECT_URI_KEY] = redirectUri;
-            returnedData[STATE_KEY] = state;
-
-            if(clientSecret != null){
-              returnedData[CLIENT_SECRET_KEY] = clientSecret;
-            }
-
-            onDone(returnedData);
-          }
+      onWebViewCreated: (controller) {
+        if (clearCache) {
+          controller.clearCache();
+          CookieManager().clearCookies();
         }
+      },
+      userAgent: userAgent,
+      initialUrl: authUrl,
+      javascriptMode: JavascriptMode.unrestricted,
+      onPageStarted: (url) async {
+        if (url.startsWith(redirectUri)){
+          var returnedData = _getQueryParams(url);
+          returnedData[CLIENT_ID_KEY] = clientID;
+          returnedData[REDIRECT_URI_KEY] = redirectUri;
+          returnedData[STATE_KEY] = state;
+
+          if(clientSecret != null){
+            returnedData[CLIENT_SECRET_KEY] = clientSecret;
+          }
+
+          onDone(returnedData);
+        }
+      }
     );
   }
 
+  /// Parses url query params into a map
+  /// @param url: The url to parse.
   Map<String, String> _getQueryParams(String url){
     final List<String> urlParams = url.split(RegExp('[?&# ]'));
     final Map<String, String> queryParams = HashMap();

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-/// This class contains variables that provide
-/// easy access to the common properties of a
-/// user. It also contains all data from the
-/// authentication response and the user
-/// response in response,
+/// This class contains the access token and
+/// variables that provide easy access to the
+/// common properties of a user. It also contains
+/// all data from the authentication response and
+/// the user response in 'response' and 'userJson'
+/// respectively.
 class AuthData{
   const AuthData({
     this.clientID, this.accessToken, this.firstName, this.lastName,
@@ -12,16 +13,18 @@ class AuthData{
     this.response,
   });
 
-  final String userID;
-  final String clientID;
-  final String accessToken;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String profileImgUrl;
-  final Map<String, dynamic> userJson;
-  final Map<String, String> response;
+  final String userID; // User's profile id
+  final String clientID; // OAuth client id
+  final String accessToken; // OAuth access token
+  final String firstName; // User's first name
+  final String lastName; // User's last name
+  final String email; // User's email
+  final String profileImgUrl; // User's profile image url
+  final Map<String, dynamic> userJson; // Full returned user json
+  final Map<String, String> response; // Full returned auth response.
 
+  /// Creates a formatted string from
+  /// the response data.
   String _formatResponse(){
     StringBuffer result = StringBuffer('\n');
 
@@ -36,10 +39,14 @@ class AuthData{
     return result.toString();
   }
 
+  /// Formats user json for printing
   String _formatJson(){
     return JsonEncoder.withIndent('    ').convert(userJson);
   }
 
+  /// The only public method in this class
+  /// Returns all the data in this class as
+  /// a formatted string.
   @override
   String toString() {
     String responseString = _formatResponse();

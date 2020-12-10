@@ -6,7 +6,9 @@ import 'engine/visa.dart';
 import 'auth-data.dart';
 import 'engine/oauth.dart';
 
+/// Enables Github [OAuth] authentication
 class GithubAuth implements Visa{
+  // User profile API endpoint.
   final baseUrl = 'https://github.com/login/oauth/authorize';
 
   SimpleAuth visa;
@@ -14,6 +16,10 @@ class GithubAuth implements Visa{
   GithubAuth(){
     visa = SimpleAuth(
         baseUrl: baseUrl,
+        /// Github returns a code which can be exchanged
+        /// for a token. This function gets the token and
+        /// Sends a request to the user profile api endpoint.
+        /// Returns an AuthData object.
         getAuthData: (Map <String, String> data) async {
           await _getToken(data);
           var token = data[OAuth.TOKEN_KEY];
@@ -40,6 +46,9 @@ class GithubAuth implements Visa{
     );
   }
 
+  /// This function combines information
+  /// from the user [json] and auth response [data]
+  /// to build an [AuthData] object.
   AuthData authData(
       Map<String, dynamic> json,
       Map<String, String>data) {
@@ -56,6 +65,10 @@ class GithubAuth implements Visa{
     );
   }
 
+  /// Github's [OAuth] endpoint returns a code
+  /// which can be exchanged for a token. This
+  /// function performs the exchange and adds the
+  /// returned data to the response [data] map.
   _getToken(Map<String, String> data) async {
     var tokenEndpoint = 'https://github.com/login/oauth/access_token';
     var tokenResponse = await http.post(tokenEndpoint,

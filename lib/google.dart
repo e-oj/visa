@@ -6,21 +6,28 @@ import 'engine/visa.dart';
 import 'auth-data.dart';
 import 'engine/oauth.dart';
 
+/// Enables Google [OAuth] authentication
 class GoogleAuth implements Visa{
+  // User profile API endpoint.
   final baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   String personFields;
   SimpleAuth visa;
 
   GoogleAuth({this.personFields=""}){
+    // User profile API endpoint.
+    var baseProfileUrl = 'https://people.googleapis.com/v1/people/me';
     personFields = _getPersonFields(personFields);
+
     visa = SimpleAuth(
         baseUrl: baseUrl,
+        /// Sends a request to the user profile api
+        /// endpoint. Returns an AuthData object.
         getAuthData: (Map <String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
-          var baseProfileUrl = 'https://people.googleapis.com/v1/people/me'
-              '?personFields=$personFields';
+          var profileUrl = '$baseProfileUrl?personFields=$personFields';
 
-          var profileResponse = await http.get(baseProfileUrl, headers: {
+
+          var profileResponse = await http.get(profileUrl, headers: {
             'Authorization': 'Bearer $token'
           });
           var profileJson = json.decode(profileResponse.body);
@@ -30,6 +37,9 @@ class GoogleAuth implements Visa{
     );
   }
 
+  /// This function combines information
+  /// from the user [json] and auth response [data]
+  /// to build an [AuthData] object.
   AuthData authData(
       Map<String, dynamic> json,
       Map<String, String>data
@@ -49,9 +59,11 @@ class GoogleAuth implements Visa{
     );
   }
 
+  /// Merges the provided personFields with
+  /// the default personFields.
   _getPersonFields(String fields){
-    Set defaultFields = {'names', 'emailAddresses', 'photos', 'metadata'};
-    Set inputFields = Set.from(fields.split(','));
+    Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
+    Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
 
     defaultFields.addAll(inputFields);
 
