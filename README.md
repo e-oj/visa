@@ -1,6 +1,6 @@
 # visa
 
-Easy third party authentication for fluuter apps.
+Easy third party authentication for flutter apps.
 
 ## Getting Started
 
