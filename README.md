@@ -20,11 +20,23 @@ There are 6 default OAuth providers at the moment:
   GithubAuth()
   GoogleAuth({ String personFields })
 ```
-
-#### AuthProvider().visa.authenticate
-Super simple. Returns a WebView that's been set up for authentication. 
+Create a new instance:
 ```dart
-visa.authenticate({
+FacebookAuth fbAuth = FacebookAuth();
+// or
+var fbAuth = FacebookAuth();
+
+SimpleAuth visa = fbAuth.visa;
+// or
+var visa = fbAuth.visa;
+```
+#### SimpleAuth.authenticate({ params })
+As shown above, each provider contains a **SimpleAuth** instance called **visa**.
+The SimpleAuth class has only one public function: **authenticate()**. It takes
+in all the necessary OAuth credentials and returns a **WebView** that's been set 
+up for authentication. 
+```dart
+WebView authenticate({
   bool newSession=false // If true, user has to reenter username and password even if they've logged in before
   String clientSecret, // Some providers (GitHub for instance) require the OAuth client secret (from developer portal).
   @required String clientID, // OAuth client ID (from developer portal)
