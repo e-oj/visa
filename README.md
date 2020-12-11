@@ -9,6 +9,7 @@ Install the visa package
 ## Basic Usage 
 
 ### Step 1 - Get a Provider.
+Implementing new providers is covered under *Advanced Usage*.
 There are 6 default OAuth providers at the moment:
 ```dart
   FacebookAuth()
