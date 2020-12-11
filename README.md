@@ -12,14 +12,14 @@ Install the visa package
 
 #### Step 1 - Get a Provider.
 There are 6 default OAuth providers at the moment:
-<ul>
-  FacebookAuth()<br/>
-  TwitterAuth()<br/>
-  TwitchAuth()<br/>
-  DiscordAuth()<br/>
-  GithubAuth()<br/>
+```dart
+  FacebookAuth()
+  TwitterAuth()
+  TwitchAuth()
+  DiscordAuth()
+  GithubAuth()
   GoogleAuth({ String personFields })
-</ul>
+```
 
 #### AuthProvider().visa.authenticate
 Super simple. Returns a WebView that's been set up for authentication. 
