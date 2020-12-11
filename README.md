@@ -11,15 +11,14 @@ Install the visa package
 ### Basic Usage 
 
 #### Step 1 - Get a Provider.
-There are 6 default OAuth providers at the moment:<br/>
-<br/>
+There are 6 default OAuth providers at the moment:
 <ul>
   FacebookAuth()<br/>
   TwitterAuth()<br/>
   TwitchAuth()<br/>
   DiscordAuth()<br/>
   GithubAuth()<br/>
-  GoogleAuth({ String personFields })<br/>
+  GoogleAuth({ String personFields })
 </ul>
 
 #### AuthProvider().visa.authenticate
