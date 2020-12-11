@@ -6,11 +6,9 @@ Easy third party authentication for flutter apps.
 
 Install the visa package
 
-## API
+## Basic Usage 
 
-### Basic Usage 
-
-#### Step 1 - Get a Provider.
+### Step 1 - Get a Provider.
 There are 6 default OAuth providers at the moment:
 ```dart
   FacebookAuth()
