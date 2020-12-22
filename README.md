@@ -103,4 +103,20 @@ It provides shortcuts to access common user properties (userId, name, email, pro
 You have successfully implemented third party auth in your app! you're now one step closer to launch. Rejoice!
 
 ## Advanced Usage
+You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Let's have a look at the Visa interface:
+```dart
+/// Visa interface
+abstract class Visa{
+  /// a [SimpleAuth] instance
+  SimpleAuth visa;
+
+  /// This function combines information
+  /// from the user [json] and auth response [data]
+  /// to build an [AuthData] object.
+  AuthData authData(
+      Map<String, dynamic> json,
+      Map<String, String> data
+  );
+}
+```
 
