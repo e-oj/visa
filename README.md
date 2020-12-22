@@ -83,7 +83,7 @@ done(AuthData authData){
 ```
 
 ### Step 3 - Use AuthData.
-The AuthData object contains all the information collected throughout the authentication process. It contains user data and authentication metadata and we should all be grateful it exists. As shown in the code sample above, this object is passed to the "authenticate" callback function. Let's have a look at it's structure:
+The AuthData object contains all the information collected throughout the authentication process. It contains both user data and authentication metadata. As shown in the code sample above, this object is passed to the "authenticate" callback function. Let's have a look at it's structure:
 ```dart
 class AuthData {
   final String userID; // User's profile id
