@@ -50,8 +50,6 @@ import 'package:visa/auth-data.dart';
 import 'package:visa/fb.dart';
 
 class AuthPage extends StatelessWidget {
-  AuthPage({Key key}): super(key: key);
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
