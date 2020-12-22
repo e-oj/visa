@@ -60,7 +60,7 @@ class AuthPage extends StatelessWidget {
           scope: 'public_profile,email',
           state: 'fbAuth',
           onDone: done
-      ),
+      )
     );
   }
 }
