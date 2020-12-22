@@ -87,13 +87,13 @@ The AuthData object contains all the information collected throughout the authen
 ```dart
 class AuthData {
   final String userID; // User's profile id
-  final String clientID; // OAuth client id
-  final String accessToken; // OAuth access token
   final String firstName; // User's first name
   final String lastName; // User's last name
   final String email; // User's email
   final String profileImgUrl; // User's profile image url
   final Map<String, dynamic> userJson; // Full returned user json
   final Map<String, String> response; // Full returned auth response.
+  final String clientID; // OAuth client id
+  final String accessToken; // OAuth access token
 }
 ```
