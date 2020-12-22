@@ -24,11 +24,14 @@ Create a new instance:
 FacebookAuth fbAuth = FacebookAuth();
 SimpleAuth visa = fbAuth.visa;
 ```
-#### SimpleAuth.authenticate({ params })
+
+### Step 2 - Authenticate.
 As shown above, each provider contains a **SimpleAuth** instance called **visa**.
 The SimpleAuth class has only one public function: **authenticate()**. It takes
 in all the necessary OAuth credentials and returns a **WebView** that's been set 
 up for authentication. 
+
+#### SimpleAuth.authenticate({ params })
 ```dart
 WebView authenticate({
   bool newSession=false // If true, user has to reenter username and password even if they've logged in before
