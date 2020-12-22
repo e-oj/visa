@@ -22,12 +22,7 @@ There are 6 default OAuth providers at the moment:
 Create a new instance:
 ```dart
 FacebookAuth fbAuth = FacebookAuth();
-// or
-var fbAuth = FacebookAuth();
-
 SimpleAuth visa = fbAuth.visa;
-// or
-var visa = fbAuth.visa;
 ```
 #### SimpleAuth.authenticate({ params })
 As shown above, each provider contains a **SimpleAuth** instance called **visa**.
