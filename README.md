@@ -19,7 +19,7 @@ There are 6 default OAuth providers at the moment:
   GithubAuth()
   GoogleAuth({ String personFields })
 ```
-Create a new instance:
+#### Create a new instance:
 ```dart
 FacebookAuth fbAuth = FacebookAuth();
 SimpleAuth visa = fbAuth.visa;
