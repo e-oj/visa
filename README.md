@@ -41,7 +41,7 @@ WebView authenticate({
 });
 ```
 
-Here's an example:
+Here's how you would use this function:
 ```Dart
 import 'package:visa/auth-data.dart';
 import 'package:visa/fb.dart';
@@ -64,18 +64,21 @@ class AuthPage extends StatelessWidget {
       ),
     );
   }
-  
-  done(AuthData authData){
-    print(authData);
-    
-    /// You can pass the [AuthData] object to a 
-    /// post authentication screen. It contaions 
-    /// all the user and OAuth data collected during
-    /// the authentication process.
-    Navigator.pushReplacementNamed(
-        context, '/complete-profile', arguments: authData
-    );
-  };
 }
+```
+In the sample above, the named parameter <i>OnDone</i> is a callback which recieves a single arument: an AuthData object, which contains all the authentication info. We'll look at AuthData in the next section but here's how you would pass an AuthData object to the next screen via the <i>onDone</i> callback.
 
+```dart
+done(AuthData authData){
+  print(authData);
+
+  /// You can pass the [AuthData] object to a 
+  /// post-authentication screen. It contaions 
+  /// all the user and OAuth data collected during
+  /// the authentication process. In this example,
+  /// our post-authentication screen is "complete-profile".
+  Navigator.pushReplacementNamed(
+      context, '/complete-profile', arguments: authData
+  );
+}
 ```
