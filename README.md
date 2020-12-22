@@ -55,8 +55,6 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,
-      
       /// Simply Provide all the necessary credentials
       body: FaceBookAuth().visa.authenticate(
           clientID: '139732240983759',
