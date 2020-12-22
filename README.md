@@ -65,7 +65,7 @@ class AuthPage extends StatelessWidget {
   }
 }
 ```
-In the sample above, the named parameter <i>OnDone</i> is a callback which recieves a single arument: an AuthData object, which contains all the authentication info. We'll look at AuthData in the next section but here's how you would pass an AuthData object to the next screen via the <i>onDone</i> callback.
+In the sample above, the named parameter <b>OnDone</b> is a callback which recieves a single arument: an <b>AuthData</b> object, which contains all the authentication info. We'll look at <b>AuthData</b> in the next section but here's how you would pass an <b>AuthData</b> object to the next screen via the <b>OnDone</b> callback.
 
 ```dart
 done(AuthData authData){
