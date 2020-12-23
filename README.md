@@ -213,7 +213,52 @@ AuthData authData(
   );
 }
 ```
-And that's it! If you create a new provider, feel free to open a PR and I'll be happy to add it to the project.
+
+#### Handling Intermediate Steps
+In some cases, the intitial request to an OAuth endpoint returns a code instead of an access token. This code has to be 
+exchanged for an actual api access token. Github uses this OAuth flow and the code above needs a few adjustments to accomodate
+the intermediate step. Let's take a look at the first few lines of the getAuthData function created in the Github constructor:
+```dart
+getAuthData(Map <String, String> data) async {
+    // This function retrieves the access token and
+    // adds it to the data HashMap.
+    await _getToken(data);
+    
+    // We can now access the token
+    var token = data[OAuth.TOKEN_KEY];
+    
+    // ... Make api requests/retrieve user data  with the token
+}
+```
+_getToken makes the request to exchange an OAuth code for an access token.
+
+```dart
+  /// Github's [OAuth] endpoint returns a code
+  /// which can be exchanged for a token. This
+  /// function performs the exchange and adds the
+  /// returned data to the response [data] map.
+  _getToken(Map<String, String> data) async {
+    var tokenEndpoint = 'https://github.com/login/oauth/access_token';
+    var tokenResponse = await http.post(tokenEndpoint,
+        headers: {'Accept': 'application/json',},
+        body: {
+          'client_id': data[OAuth.CLIENT_ID_KEY],
+          'client_secret': data[OAuth.CLIENT_SECRET_KEY],
+          'code': data[OAuth.CODE_KEY],
+          'redirect_uri': data[OAuth.REDIRECT_URI_KEY],
+          'state': data[OAuth.STATE_KEY]
+        });
+
+    var responseJson = json.decode(tokenResponse.body);
+    var tokenTypeKey = 'token_type';
+
+    data[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
+    data[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
+    data[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+  }
+}
+```
+And that's how to handle intermedite OAuth steps! If you end up creating a new provider, feel free to open a PR and I'll be happy to add it to the project.
 Happy OAuthing!
 
 ## Reference:
