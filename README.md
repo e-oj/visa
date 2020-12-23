@@ -144,6 +144,8 @@ class SimpleAuth{
   final Function getAuthData; 
 }
 ```
+
+### Creating an OAuth Provider
 Adding a new provider simply means creating a new class that implements the visa interface. You can check out the source code for various implementations but here's the full Discord implementation as a reference:
 ```dart
 /// Enables Discord [OAuth] authentication
