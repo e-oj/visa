@@ -7,11 +7,11 @@ import 'auth-data.dart';
 import 'engine/oauth.dart';
 
 /// Enables Facebook [OAuth] authentication
-class FaceBookAuth implements Visa{
+class FacebookAuth implements Visa{
   final baseUrl = 'https://www.facebook.com/v8.0/dialog/oauth';
   SimpleAuth visa;
 
-  FaceBookAuth(){
+  FacebookAuth(){
     // User profile API endpoint.
     var baseProfileUrl = 'https://graph.facebook.com/me';
 

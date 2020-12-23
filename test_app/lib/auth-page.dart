@@ -35,7 +35,7 @@ class AuthPage extends StatelessWidget {
     };
 
     switch(thirdParty){
-      case 'fb': return FaceBookAuth().visa.authenticate(
+      case 'fb': return FacebookAuth().visa.authenticate(
           clientID: '139732240983759',
           redirectUri: 'https://www.e-oj.com/oauth',
           scope: 'public_profile,email',
