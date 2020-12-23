@@ -1,5 +1,5 @@
 # visa
-Easy third party authentication for flutter apps. This README is under construction.
+Easy third party authentication (OAuth 2.0) for flutter apps.
 
 ### Demo
 <img src="http://drive.google.com/uc?export=view&id=1KRz_GgRGqiT7rkycPRgdQvjF4u7G7pg5" alt="demo" width="550"></img>
