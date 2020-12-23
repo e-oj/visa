@@ -113,7 +113,7 @@ class AuthData {
 It provides shortcuts to access **common user properties** (userId, name, email, profile image) as well as the **accessToken**. The complete, returned user json can be accessed through the **userJson** property and you can access the full authentication response (the response in which we recieved an API access token) through the **response** property. 
 
 ### Step 4 - Rejoice!
-You have successfully implemented third party auth in your app! you're now one step closer to launch. Rejoice!
+You have successfully implemented third party auth in your app! you're one step closer to launch. Rejoice!
 
 ## Advanced Usage
 You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Have a look at the Visa interface:
