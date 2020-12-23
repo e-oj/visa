@@ -2,7 +2,7 @@
 Easy third party authentication for flutter apps. This README is under construction.
 
 ### Demo
-<img src="http://drive.google.com/uc?export=view&id=1A_rhQRbTcAObfYiw-JuOWdDuI6L4hIXy" alt="demo" width="550"></img>
+<img src="http://drive.google.com/uc?export=view&id=1KRz_GgRGqiT7rkycPRgdQvjF4u7G7pg5" alt="demo" width="550"></img>
 
 - [Getting Started](#getting-started)
 - [Basic Usage](#basic-usage)
