@@ -103,7 +103,7 @@ It provides shortcuts to access common user properties (userId, name, email, pro
 You have successfully implemented third party auth in your app! you're now one step closer to launch. Rejoice!
 
 ## Advanced Usage
-You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Let's have a look at the Visa interface:
+You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Have a look at the Visa interface:
 ```dart
 /// Visa interface
 abstract class Visa{
@@ -119,4 +119,80 @@ abstract class Visa{
   );
 }
 ```
+An here's the SimpleAuth constructor:
+```dart
+class SimpleAuth{
 
+  /// Creates a new instance based on the given OAuth
+  /// baseUrl and getAuthData function.
+  const SimpleAuth ({
+    @required this.baseUrl, @required this.getAuthData
+  });
+  
+  
+  final String baseUrl; // OAuth base url
+  
+  /// This function makes the necessary api calls to
+  /// get a user's profile data. It accepts a single
+  /// argument: a Map<String, String> containing the 
+  /// full auth response including an api access token.
+  /// An AuthData object is created from a combination 
+  /// of the passed in auth response and the user 
+  /// response returned from the api.
+  ///
+  /// @return AuthData
+  final Function getAuthData; 
+}
+```
+Adding a new provider simply means creating a new class that implements the visa interface. You can check out the source code for various implementations but here's the full Discord implementation as a reference:
+```dart
+/// Enables Discord [OAuth] authentication
+class DiscordAuth implements Visa{
+  // User profile API endpoint.
+  final baseUrl = 'https://discord.com/api/oauth2/authorize';
+  SimpleAuth visa;
+
+  DiscordAuth(){
+    visa = SimpleAuth(
+        baseUrl: baseUrl,
+        /// Sends a request to the user profile api
+        /// endpoint. Returns an AuthData object.
+        getAuthData: (Map <String, String> data) async {
+          var token = data[OAuth.TOKEN_KEY];
+          var baseProfileUrl = 'https://discord.com/api/users/@me';
+          var profileResponse = await http.get(baseProfileUrl, headers: {
+            'Authorization': 'Bearer $token',
+          });
+          var profileJson = json.decode(profileResponse.body);
+
+          return authData(profileJson, data);
+        }
+    );
+  }
+
+  /// This function combines information
+  /// from the user [json] and auth response [data]
+  /// to build an [AuthData] object.
+  @override
+  AuthData authData(
+      Map<String, dynamic> json,
+      Map<String, String> data
+  ){
+    final String accessToken = data[OAuth.TOKEN_KEY];
+    final String userId = json['id'] as String;
+    final String avatar = json['avatar'] as String;
+    final String profileImgUrl = 'https://cdn.discordapp.com/'
+        'avatars/$userId/$avatar.png';
+
+    return AuthData(
+        clientID: data['clientID'],
+        accessToken: accessToken,
+        userID: userId,
+        email: json['email'] as String,
+        profileImgUrl: profileImgUrl,
+        response: data,
+        userJson: json
+    );
+  }
+}
+```
