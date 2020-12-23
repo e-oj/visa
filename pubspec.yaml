@@ -1,6 +1,6 @@
 name: visa
 description: Easy third party authentication.
-version: 0.0.1
+version: 1.0.0
 repository: https://github.com/e-oj/visa
 
 environment:
