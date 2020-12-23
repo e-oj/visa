@@ -146,7 +146,9 @@ class SimpleAuth{
 ```
 
 ### Creating an OAuth Provider
-Adding a new provider simply means creating a new class that implements the visa interface. You can check out the source code for various implementations but here's the full Discord implementation as a reference:
+Adding a new provider simply means creating a new class that implements the visa interface. You can check out the source code for various implementations but here's the full Discord implementation as a reference.
+
+#### Constructor:
 ```dart
 /// Enables Discord [OAuth] authentication
 class DiscordAuth implements Visa{
@@ -171,30 +173,33 @@ class DiscordAuth implements Visa{
         }
     );
   }
+}
+```
 
-  /// This function combines information
-  /// from the user [json] and auth response [data]
-  /// to build an [AuthData] object.
-  @override
-  AuthData authData(
-      Map<String, dynamic> json,
-      Map<String, String> data
-  ){
-    final String accessToken = data[OAuth.TOKEN_KEY];
-    final String userId = json['id'] as String;
-    final String avatar = json['avatar'] as String;
-    final String profileImgUrl = 'https://cdn.discordapp.com/'
-        'avatars/$userId/$avatar.png';
+#### authData() 
+```dart
+/// This function combines information
+/// from the user [json] and auth response [data]
+/// to build an [AuthData] object.
+@override
+AuthData authData(
+    Map<String, dynamic> json,
+    Map<String, String> data
+){
+  final String accessToken = data[OAuth.TOKEN_KEY];
+  final String userId = json['id'] as String;
+  final String avatar = json['avatar'] as String;
+  final String profileImgUrl = 'https://cdn.discordapp.com/'
+      'avatars/$userId/$avatar.png';
 
-    return AuthData(
-        clientID: data['clientID'],
-        accessToken: accessToken,
-        userID: userId,
-        email: json['email'] as String,
-        profileImgUrl: profileImgUrl,
-        response: data,
-        userJson: json
-    );
-  }
+  return AuthData(
+      clientID: data['clientID'],
+      accessToken: accessToken,
+      userID: userId,
+      email: json['email'] as String,
+      profileImgUrl: profileImgUrl,
+      response: data,
+      userJson: json
+  );
 }
 ```
