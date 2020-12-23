@@ -20,7 +20,7 @@ Easy third party authentication for flutter apps. This README is under construct
 
 ### Install visa:
 
-- Open the pubspec.yaml file located inside the app folder, and add ```visa:``` under dependencies.
+- Open your pubspec.yaml file and add ```visa:``` under dependencies.
 - From the terminal: Run flutter pub get.
 - Add a corresponding import statement in the Dart code.
 
