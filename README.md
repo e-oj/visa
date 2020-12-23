@@ -76,7 +76,7 @@ class AuthPage extends StatelessWidget {
   }
 }
 ```
-In the sample above, the named parameter <b>onDone</b> is a callback which recieves a single arument: an <b>AuthData</b> object, which contains all the authentication info. We'll look at <b>AuthData</b> in the next section but here's how you would pass an <b>AuthData</b> object to the next screen via the <b>onDone</b> callback.
+In the sample above, the named parameter **onDone** is a callback which recieves a single arument: an [AuthData](#step-3---use-authdata) object, which contains all the authentication info. We'll look at [AuthData](#step-3---use-authdata) in the next section but here's how you would pass an [AuthData](#step-3---use-authdata) object to the next screen via the **onDone** callback.
 
 ```dart
 done(AuthData authData){
@@ -108,7 +108,7 @@ class AuthData {
   final String accessToken; // OAuth access token
 }
 ```
-It provides shortcuts to access common user properties (userId, name, email, profile image) as well as the accessToken. The complete, returned user json can be accessed through the <b>userJson</b> property and you can access the full authentication response (the response in which we recieved an API access token) through the <b>response</b> property. 
+It provides shortcuts to access common user properties (userId, name, email, profile image) as well as the accessToken. The complete, returned user json can be accessed through the **userJson** property and you can access the full authentication response (the response in which we recieved an API access token) through the **response** property. 
 
 ### Step 4 - Rejoice!
 You have successfully implemented third party auth in your app! you're now one step closer to launch. Rejoice!
