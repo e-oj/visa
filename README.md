@@ -176,7 +176,7 @@ class DiscordAuth implements Visa{
 }
 ```
 
-#### authData() 
+#### Function authData:
 ```dart
 /// This function combines information
 /// from the user [json] and auth response [data]
