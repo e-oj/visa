@@ -214,7 +214,7 @@ AuthData authData(
 }
 ```
 And that's it! If you create a new provider, feel free to open a PR and I'll be happy to add it to the project.
-Happy Authenticating!
+Happy OAuthing!
 
 ## Reference:
 
