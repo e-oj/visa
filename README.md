@@ -24,7 +24,6 @@ Implementing new providers is covered under *Advanced Usage*.
 There are 6 default OAuth providers at the moment:
 ```dart
   FacebookAuth()
-  TwitterAuth()
   TwitchAuth()
   DiscordAuth()
   GithubAuth()
