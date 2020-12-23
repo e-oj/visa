@@ -1,8 +1,7 @@
 name: visa
 description: Easy third party authentication.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/e-oj/visa
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
