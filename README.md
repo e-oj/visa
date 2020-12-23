@@ -6,7 +6,7 @@ Easy third party authentication for flutter apps. This README is under construct
   * [Get a Provider](#step-1---get-a-provider)
   * [Authenticate](#step-2---authenticate)
   * [Use AuthData](#step-3---use-authdata)
-  * [Rejoice](#step-4---rejoice)
+  * [Rejoice!](#step-4---rejoice)
 - [Advanced Usage](#advanced-usage)
   * [Creating an OAuth Provider](#creating-an-oauth-provider)
   * [Constructor](#constructor)
@@ -213,3 +213,19 @@ AuthData authData(
   );
 }
 ```
+And that's it! If you create a new provider, feel free to open a PR and I'll be happy to add it to the project.
+Happy Authenticating!
+
+## Reference:
+
+- [Getting Started](#getting-started)
+- [Basic Usage](#basic-usage)
+  * [Get a Provider](#step-1---get-a-provider)
+  * [Authenticate](#step-2---authenticate)
+  * [Use AuthData](#step-3---use-authdata)
+  * [Rejoice!](#step-4---rejoice)
+- [Advanced Usage](#advanced-usage)
+  * [Creating an OAuth Provider](#creating-an-oauth-provider)
+  * [Constructor](#constructor)
+  * [authData Function](#authdata-function)
+
