@@ -1,11 +1,11 @@
-[Getting Started](#getting-started)<br>
-[Basic Usage](#basic-usage)<br>
-[Get a Provider](#step-1---get-a-provider)<br>
-[Authenticate](#step-2---authenticate)<br>
-[Use AuthData](#step-3---use-authdata)
-
 # visa
 Easy third party authentication for flutter apps. This README is under construction.
+
+- [Getting Started](#getting-started)<br>
+- [Basic Usage](#basic-usage)<br>
+- [Get a Provider](#step-1---get-a-provider)<br>
+- [Authenticate](#step-2---authenticate)<br>
+- [Use AuthData](#step-3---use-authdata)
 
 ## Getting Started
 
