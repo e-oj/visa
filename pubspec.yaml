@@ -1,5 +1,8 @@
 name: visa
-description: Easy third party authentication.
+description: Visa is an OAuth 2.0 package that makes it super
+  easy to add third party authentication to flutter apps.
+  It has support for FB, Google, Discord, Twitch, and Github auth.
+  It also provides support for adding new OAuth providers.
 version: 1.0.0
 repository: https://github.com/e-oj/visa
 
