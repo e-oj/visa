@@ -22,7 +22,19 @@ This is an **OAuth 2.0** package that makes it super easy to add third party aut
 
 - Open your pubspec.yaml file and add ```visa:``` under dependencies.
 - From the terminal: Run flutter pub get.
-- Add a corresponding import statement in the Dart code.
+- Add the relevant import statements in the Dart code.
+```dart
+// Possible imports:
+import 'package:visa/engine/oauth.dart';
+import 'package:visa/engine/simple-auth.dart';
+import 'package:visa/engine/visa.dart';
+import 'package:visa/auth-data.dart';
+import 'package:visa/discord.dart';
+import 'package:visa/fb.dart';
+import 'package:visa/github.dart';
+import 'package:visa/google.dart';
+import 'package:visa/twitch.dart';
+```
 
 ## Basic Usage 
 
