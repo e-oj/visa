@@ -15,6 +15,7 @@ dependencies:
   http: ^0.12.2
   webview_flutter: ^1.0.7
 
+# TODO - move hexcolor to dev_dependencies
 dev_dependencies:
   flutter_test:
     sdk: flutter
