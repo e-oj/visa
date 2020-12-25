@@ -4,20 +4,16 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../auth-data.dart';
 import 'oauth.dart';
 
-
 /// Magic class [SimpleAuth] makes it easy to
 /// add new [OAuth] providers by handling the
 /// shared authentication process and
 /// delegating the platform specific user
 /// retrieval process to [getAuthData], a function
 /// provided through the constructor.
-class SimpleAuth{
+class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  const SimpleAuth ({
-    @required this.baseUrl, @required this.getAuthData
-  });
-
+  const SimpleAuth({@required this.baseUrl, @required this.getAuthData});
 
   final String baseUrl; // OAuth base url
 
@@ -35,26 +31,27 @@ class SimpleAuth{
   /// Creates an [OAuth] instance with the
   /// provided credentials. Returns a WebView
   /// That's been set up for authentication
-  WebView authenticate({
-    @required String clientID, String clientSecret, @required String redirectUri,
-    @required String state, @required String scope, @required Function onDone,
-    bool newSession=false
-  }){
+  WebView authenticate(
+      {@required String clientID,
+      String clientSecret,
+      @required String redirectUri,
+      @required String state,
+      @required String scope,
+      @required Function onDone,
+      bool newSession = false}) {
     final OAuth oAuth = OAuth(
-      baseUrl: baseUrl,
-      clientID: clientID,
-      redirectUri: redirectUri,
-      state: state,
-      scope: scope,
-      clientSecret: clientSecret
-    );
+        baseUrl: baseUrl,
+        clientID: clientID,
+        redirectUri: redirectUri,
+        state: state,
+        scope: scope,
+        clientSecret: clientSecret);
 
     return oAuth.authenticate(
-      clearCache: newSession,
-      onDone: (responseData) async {
-        AuthData authData = await getAuthData(responseData);
-        onDone(authData);
-      }
-    );
+        clearCache: newSession,
+        onDone: (responseData) async {
+          AuthData authData = await getAuthData(responseData);
+          onDone(authData);
+        });
   }
 }

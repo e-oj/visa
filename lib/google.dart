@@ -7,43 +7,38 @@ import 'auth-data.dart';
 import 'engine/oauth.dart';
 
 /// Enables Google [OAuth] authentication
-class GoogleAuth implements Visa{
+class GoogleAuth implements Visa {
   // User profile API endpoint.
   final baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   String personFields;
   SimpleAuth visa;
 
-  GoogleAuth({this.personFields=""}){
+  GoogleAuth({this.personFields = ""}) {
     // User profile API endpoint.
     var baseProfileUrl = 'https://people.googleapis.com/v1/people/me';
     personFields = _getPersonFields(personFields);
 
     visa = SimpleAuth(
         baseUrl: baseUrl,
+
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
-        getAuthData: (Map <String, String> data) async {
+        getAuthData: (Map<String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
           var profileUrl = '$baseProfileUrl?personFields=$personFields';
 
-
-          var profileResponse = await http.get(profileUrl, headers: {
-            'Authorization': 'Bearer $token'
-          });
+          var profileResponse = await http
+              .get(profileUrl, headers: {'Authorization': 'Bearer $token'});
           var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);
-        }
-    );
+        });
   }
 
   /// This function combines information
   /// from the user [json] and auth response [data]
   /// to build an [AuthData] object.
-  AuthData authData(
-      Map<String, dynamic> json,
-      Map<String, String>data
-      ){
+  AuthData authData(Map<String, dynamic> json, Map<String, String> data) {
     final String accessToken = data[OAuth.TOKEN_KEY];
 
     return AuthData(
@@ -55,13 +50,12 @@ class GoogleAuth implements Visa{
         email: json['emailAddresses'][0]['value'],
         profileImgUrl: json['photos'][0]['url'],
         response: data,
-        userJson: json
-    );
+        userJson: json);
   }
 
   /// Merges the provided personFields with
   /// the default personFields.
-  _getPersonFields(String fields){
+  _getPersonFields(String fields) {
     Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
     Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
 

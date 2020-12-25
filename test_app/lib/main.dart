@@ -25,9 +25,12 @@ class MyApp extends StatelessWidget {
         '/': (BuildContext context) => RegistrationPage(),
         '/complete-profile': (BuildContext context) => AuthResult(),
         '/fb-auth': (BuildContext context) => AuthPage(thirdParty: 'fb'),
-        '/twitch-auth': (BuildContext context) => AuthPage(thirdParty: 'twitch'),
-        '/discord-auth': (BuildContext context) => AuthPage(thirdParty: 'discord'),
-        '/github-auth': (BuildContext context) => AuthPage(thirdParty: 'github'),
+        '/twitch-auth': (BuildContext context) =>
+            AuthPage(thirdParty: 'twitch'),
+        '/discord-auth': (BuildContext context) =>
+            AuthPage(thirdParty: 'discord'),
+        '/github-auth': (BuildContext context) =>
+            AuthPage(thirdParty: 'github'),
         '/google-auth': (BuildContext context) => AuthPage(thirdParty: 'google')
       },
     );

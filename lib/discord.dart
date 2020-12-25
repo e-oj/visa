@@ -7,17 +7,18 @@ import 'auth-data.dart';
 import 'engine/oauth.dart';
 
 /// Enables Discord [OAuth] authentication
-class DiscordAuth implements Visa{
+class DiscordAuth implements Visa {
   // User profile API endpoint.
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
   SimpleAuth visa;
 
-  DiscordAuth(){
+  DiscordAuth() {
     visa = SimpleAuth(
         baseUrl: baseUrl,
+
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
-        getAuthData: (Map <String, String> data) async {
+        getAuthData: (Map<String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
           var baseProfileUrl = 'https://discord.com/api/users/@me';
           var profileResponse = await http.get(baseProfileUrl, headers: {
@@ -26,18 +27,14 @@ class DiscordAuth implements Visa{
           var profileJson = json.decode(profileResponse.body);
 
           return authData(profileJson, data);
-        }
-    );
+        });
   }
 
   /// This function combines information
   /// from the user [json] and auth response [data]
   /// to build an [AuthData] object.
   @override
-  AuthData authData(
-      Map<String, dynamic> json,
-      Map<String, String> data
-  ){
+  AuthData authData(Map<String, dynamic> json, Map<String, String> data) {
     final String accessToken = data[OAuth.TOKEN_KEY];
     final String userId = json['id'] as String;
     final String avatar = json['avatar'] as String;
@@ -51,7 +48,6 @@ class DiscordAuth implements Visa{
         email: json['email'] as String,
         profileImgUrl: profileImgUrl,
         response: data,
-        userJson: json
-    );
+        userJson: json);
   }
 }

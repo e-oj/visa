@@ -6,10 +6,16 @@ import 'dart:convert';
 /// all data from the authentication response and
 /// the user response in 'response' and 'userJson'
 /// respectively.
-class AuthData{
+class AuthData {
   const AuthData({
-    this.clientID, this.accessToken, this.firstName, this.lastName,
-    this.userID, this.email, this.profileImgUrl, this.userJson,
+    this.clientID,
+    this.accessToken,
+    this.firstName,
+    this.lastName,
+    this.userID,
+    this.email,
+    this.profileImgUrl,
+    this.userJson,
     this.response,
   });
 
@@ -25,10 +31,10 @@ class AuthData{
 
   /// Creates a formatted string from
   /// the response data.
-  String _formatResponse(){
+  String _formatResponse() {
     StringBuffer result = StringBuffer('\n');
 
-    for (MapEntry data in response.entries){
+    for (MapEntry data in response.entries) {
       result.write('\t\t\t\t');
       result.write(data.key);
       result.write(' = ');
@@ -40,7 +46,7 @@ class AuthData{
   }
 
   /// Formats user json for printing
-  String _formatJson(){
+  String _formatJson() {
     return JsonEncoder.withIndent('    ').convert(userJson);
   }
 
