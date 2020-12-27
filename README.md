@@ -4,6 +4,7 @@ This is an **OAuth 2.0** package that makes it super easy to add third party aut
 ### Demo
 <img src="https://drive.google.com/uc?export=view&id=1KRz_GgRGqiT7rkycPRgdQvjF4u7G7pg5" alt="demo" width="550"></img>
 
+## Reference
 - [Getting Started](#getting-started)
 - [Basic Usage](#basic-usage)
   * [Get a Provider](#step-1---get-a-provider)
