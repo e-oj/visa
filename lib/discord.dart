@@ -8,7 +8,6 @@ import 'engine/oauth.dart';
 
 /// Enables Discord [OAuth] authentication
 class DiscordAuth implements Visa {
-  // User profile API endpoint.
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
   SimpleAuth visa;
 
@@ -20,6 +19,7 @@ class DiscordAuth implements Visa {
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
+          // User profile API endpoint.
           var baseProfileUrl = 'https://discord.com/api/users/@me';
           var profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',

@@ -8,7 +8,6 @@ import 'engine/oauth.dart';
 
 /// Enables Github [OAuth] authentication
 class GithubAuth implements Visa {
-  // User profile API endpoint.
   final baseUrl = 'https://github.com/login/oauth/authorize';
 
   SimpleAuth visa;
@@ -24,6 +23,7 @@ class GithubAuth implements Visa {
         getAuthData: (Map<String, String> data) async {
           await _getToken(data);
           var token = data[OAuth.TOKEN_KEY];
+          // User profile API endpoint.
           var baseProfileUrl = 'https://api.github.com/user';
           var headers = {'Authorization': 'token $token'};
           var profileResponse =

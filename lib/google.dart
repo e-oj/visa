@@ -8,14 +8,11 @@ import 'engine/oauth.dart';
 
 /// Enables Google [OAuth] authentication
 class GoogleAuth implements Visa {
-  // User profile API endpoint.
   final baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   String personFields;
   SimpleAuth visa;
 
   GoogleAuth({this.personFields = ""}) {
-    // User profile API endpoint.
-    var baseProfileUrl = 'https://people.googleapis.com/v1/people/me';
     personFields = _getPersonFields(personFields);
 
     visa = SimpleAuth(
@@ -25,6 +22,8 @@ class GoogleAuth implements Visa {
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
+          // User profile API endpoint.
+          var baseProfileUrl = 'https://people.googleapis.com/v1/people/me';
           var profileUrl = '$baseProfileUrl?personFields=$personFields';
 
           var profileResponse = await http

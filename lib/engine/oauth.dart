@@ -61,7 +61,9 @@ class OAuth {
         userAgent: userAgent,
         initialUrl: authUrl,
         javascriptMode: JavascriptMode.unrestricted,
-        onPageStarted: (url) async {
+        navigationDelegate: (NavigationRequest request){
+          String url = request.url;
+
           if (url.startsWith(redirectUri)) {
             var returnedData = _getQueryParams(url);
             returnedData[CLIENT_ID_KEY] = clientID;
@@ -74,6 +76,8 @@ class OAuth {
 
             onDone(returnedData);
           }
+
+          return NavigationDecision.navigate;
         });
   }
 

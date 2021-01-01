@@ -12,9 +12,6 @@ class FacebookAuth implements Visa {
   SimpleAuth visa;
 
   FacebookAuth() {
-    // User profile API endpoint.
-    var baseProfileUrl = 'https://graph.facebook.com/me';
-
     visa = SimpleAuth(
         baseUrl: baseUrl,
 
@@ -22,6 +19,8 @@ class FacebookAuth implements Visa {
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> data) async {
           final String token = data[OAuth.TOKEN_KEY];
+          // User profile API endpoint.
+          var baseProfileUrl = 'https://graph.facebook.com/me';
           final String profileUrl = '$baseProfileUrl'
               '?access_token=$token'
               '&fields=first_name,last_name,email';

@@ -12,9 +12,6 @@ class TwitchAuth implements Visa {
   SimpleAuth visa;
 
   TwitchAuth() {
-    // User profile API endpoint.
-    var baseProfileUrl = 'https://api.twitch.tv/helix/users';
-
     visa = SimpleAuth(
         baseUrl: baseUrl,
 
@@ -22,6 +19,8 @@ class TwitchAuth implements Visa {
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> data) async {
           var token = data[OAuth.TOKEN_KEY];
+          // User profile API endpoint.
+          var baseProfileUrl = 'https://api.twitch.tv/helix/users';
           var profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
             'Client-Id': data['clientID']
