@@ -41,7 +41,7 @@ import 'package:visa/engine/visa.dart';
 
 ### Step 1 - Get a Provider.
 Implementing new providers is covered under *Advanced Usage*.
-There are 6 default OAuth providers at the moment:
+There are 5 default OAuth providers at the moment:
 ```dart
   FacebookAuth()
   TwitchAuth()
