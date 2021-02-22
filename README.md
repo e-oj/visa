@@ -84,7 +84,7 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       /// Simply Provide all the necessary credentials
-      body: FaceBookAuth().visa.authenticate(
+      body: FacebookAuth().visa.authenticate(
           clientID: '139732240983759',
           redirectUri: 'https://www.e-oj.com/oauth',
           scope: 'public_profile,email',
