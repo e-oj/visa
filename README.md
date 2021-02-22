@@ -182,7 +182,7 @@ Adding a new provider simply means creating a new class that implements the visa
 ```dart
 /// Enables Discord [OAuth] authentication
 class DiscordAuth implements Visa{
-  // User profile API endpoint.
+  // Oauth base url.
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
   SimpleAuth visa;
 
