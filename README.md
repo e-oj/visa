@@ -149,7 +149,7 @@ abstract class Visa{
   );
 }
 ```
-An here's the SimpleAuth constructor:
+And here's the SimpleAuth constructor:
 ```dart
 class SimpleAuth{
 
