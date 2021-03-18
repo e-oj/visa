@@ -1,5 +1,5 @@
 # visa
-<a href="https://www.buymeacoffee.com/e.oj" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50px"></a>
+<a href="https://www.buymeacoffee.com/e.oj" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40px"></a>
 ---
 
 This is an **OAuth 2.0** package that makes it super easy to add third party authentication to flutter apps. It has support for **FB**, **Google**, **Discord**, **Twitch**, and **Github** auth. It also provides support for adding new OAuth providers. You can read this [medium article](https://emmanuelolaojo.medium.com/so-you-want-social-login-oauth-2-0-with-flutter-38f51ab02bba?sk=0da0734ecad0df90d83db18c214d4ca9) for a brief introduction.
