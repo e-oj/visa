@@ -32,9 +32,10 @@ class FacebookAuth extends Visa {
               '?access_token=$token'
               '&fields=first_name,last_name,email';
 
-          var profileResponse = await http.get(profileUrl);
+          var profileResponse = await http.get(Uri.parse(profileUrl));
           var profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In FacebookAuth -> Returned Profile Json: $profileJson');
+          if (debugMode)
+            debug('In FacebookAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
