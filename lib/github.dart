@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:visa/engine/debug.dart';
 
 import 'engine/simple-auth.dart';
 import 'engine/visa.dart';
@@ -7,9 +8,10 @@ import 'auth-data.dart';
 import 'engine/oauth.dart';
 
 /// Enables Github [OAuth] authentication
-class GithubAuth implements Visa {
+class GithubAuth extends Visa {
   final baseUrl = 'https://github.com/login/oauth/authorize';
 
+  @override
   SimpleAuth visa;
 
   GithubAuth() {
@@ -20,9 +22,13 @@ class GithubAuth implements Visa {
         /// for a token. This function gets the token and
         /// Sends a request to the user profile api endpoint.
         /// Returns an AuthData object.
-        getAuthData: (Map<String, String> data) async {
-          await _getToken(data);
-          var token = data[OAuth.TOKEN_KEY];
+        getAuthData: (Map<String, String> oauthData) async {
+          if (debugMode) debug('In GithubAuth -> OAuth Data: $oauthData');
+
+          await _getToken(oauthData);
+          var token = oauthData[OAuth.TOKEN_KEY];
+          if (debugMode) debug('In GithubAuth -> OAuth token: $token');
+
           // User profile API endpoint.
           var baseProfileUrl = 'https://api.github.com/user';
           var headers = {'Authorization': 'token $token'};
@@ -31,6 +37,8 @@ class GithubAuth implements Visa {
           var emailResponse =
               await http.get('$baseProfileUrl/emails', headers: headers);
           Map<String, dynamic> profileJson = json.decode(profileResponse.body);
+          if (debugMode) debug('In GithubAuth -> Returned Profile Json: $profileJson');
+
           List<dynamic> emailJson = json.decode(emailResponse.body);
           String emailString;
 
@@ -44,47 +52,52 @@ class GithubAuth implements Visa {
           profileJson['email'] = emailString;
           profileJson['emails'] = emailJson;
 
-          return authData(profileJson, data);
+          if (debugMode) debug('In GithubAuth -> Modified Profile Json: $profileJson');
+          return authData(profileJson, oauthData);
         });
   }
 
   /// This function combines information
-  /// from the user [json] and auth response [data]
+  /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
-  AuthData authData(Map<String, dynamic> json, Map<String, String> data) {
-    var accessToken = data[OAuth.TOKEN_KEY];
+  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+    var accessToken = oauthData[OAuth.TOKEN_KEY];
 
     return AuthData(
-        clientID: data[OAuth.CLIENT_ID_KEY],
+        clientID: oauthData[OAuth.CLIENT_ID_KEY],
         accessToken: accessToken,
-        userID: json['id'].toString(),
-        email: json['email'],
-        profileImgUrl: json['avatar_url'],
-        response: data,
-        userJson: json);
+        userID: profileJson['id'].toString(),
+        email: profileJson['email'],
+        profileImgUrl: profileJson['avatar_url'],
+        response: oauthData,
+        userJson: profileJson);
   }
 
   /// Github's [OAuth] endpoint returns a code
   /// which can be exchanged for a token. This
   /// function performs the exchange and adds the
-  /// returned data to the response [data] map.
-  _getToken(Map<String, String> data) async {
+  /// returned data to the response [oauthData] map.
+  _getToken(Map<String, String> oauthData) async {
+    if (debugMode) debug('In GithubAuth -> Exchanging OAuth Code For Token');
+
     var tokenEndpoint = 'https://github.com/login/oauth/access_token';
     var tokenResponse = await http.post(tokenEndpoint, headers: {
       'Accept': 'application/json',
     }, body: {
-      'client_id': data[OAuth.CLIENT_ID_KEY],
-      'client_secret': data[OAuth.CLIENT_SECRET_KEY],
-      'code': data[OAuth.CODE_KEY],
-      'redirect_uri': data[OAuth.REDIRECT_URI_KEY],
-      'state': data[OAuth.STATE_KEY]
+      'client_id': oauthData[OAuth.CLIENT_ID_KEY],
+      'client_secret': oauthData[OAuth.CLIENT_SECRET_KEY],
+      'code': oauthData[OAuth.CODE_KEY],
+      'redirect_uri': oauthData[OAuth.REDIRECT_URI_KEY],
+      'state': oauthData[OAuth.STATE_KEY]
     });
+
+    if (debugMode) debug('In GithubAuth -> Exchange Successful. Retrieved OAuth Token');
 
     var responseJson = json.decode(tokenResponse.body);
     var tokenTypeKey = 'token_type';
 
-    data[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
-    data[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
-    data[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+    oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
+    oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
+    oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String;
   }
 }

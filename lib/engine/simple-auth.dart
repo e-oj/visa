@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visa/engine/debug.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../auth-data.dart';
@@ -13,7 +14,7 @@ import 'oauth.dart';
 class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  const SimpleAuth({@required this.baseUrl, @required this.getAuthData});
+  SimpleAuth({@required this.baseUrl, @required this.getAuthData});
 
   final String baseUrl; // OAuth base url
 
@@ -27,6 +28,9 @@ class SimpleAuth {
   ///
   /// @return [AuthData]
   final Function getAuthData;
+
+  /// Debug mode?
+  bool debugMode = false;
 
   /// Creates an [OAuth] instance with the
   /// provided credentials. Returns a WebView
@@ -45,12 +49,17 @@ class SimpleAuth {
         redirectUri: redirectUri,
         state: state,
         scope: scope,
-        clientSecret: clientSecret);
+        clientSecret: clientSecret,
+        debugMode: debugMode);
 
     return oAuth.authenticate(
         clearCache: newSession,
         onDone: (responseData) async {
+          if (debugMode) debug('In SimpleAuth -> Response: $responseData');
+
           AuthData authData = await getAuthData(responseData);
+          if (debugMode) debug('In SimpleAuth -> Returned Authentication Data: $authData');
+
           onDone(authData);
         });
   }
