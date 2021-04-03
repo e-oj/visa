@@ -10,17 +10,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 /// for OAuth 2.0 Authentication.
 class OAuth {
   const OAuth(
-      {@required this.baseUrl,
-      @required this.clientID,
-      @required this.redirectUri,
-      @required this.state,
-      @required this.scope,
-      @required this.debugMode,
+      {required this.baseUrl,
+      required this.clientID,
+      required this.redirectUri,
+      required this.state,
+      required this.scope,
+      required this.debugMode,
       this.clientSecret});
 
   final String baseUrl; // OAuth url
   final String clientID; // OAuth clientID
-  final String clientSecret; // OAuth clientSecret
+  final String? clientSecret; // OAuth clientSecret
   final String redirectUri; // OAuth redirectUri
   final String state; // OAuth state
   final String scope; // OAuth scope
@@ -40,7 +40,7 @@ class OAuth {
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
   /// completed successfully.
-  WebView authenticate({@required Function onDone, bool clearCache = false}) {
+  WebView authenticate({required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
 
@@ -104,11 +104,11 @@ class OAuth {
 
   /// Parses url query params into a map
   /// @param url: The url to parse.
-  Map<String, String> _getQueryParams(String url) {
+  Map<String, String?> _getQueryParams(String url) {
     if (debugMode) debug('In OAuth -> Getting Query Params From Url: $url');
 
     final List<String> urlParams = url.split(RegExp('[?&# ]'));
-    final Map<String, String> queryParams = HashMap();
+    final Map<String, String?> queryParams = HashMap();
     List<String> parts;
 
     for (String param in urlParams) {

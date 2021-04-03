@@ -21,9 +21,7 @@ class _CompleteProfileState extends State<AuthResult> {
         appBar: Utils.getAppBar(context),
         body: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-          ImageDisplay(
-              height: 0.20,
-              imageUrl: authData != null ? authData.profileImgUrl : null),
+          ImageDisplay(height: 0.20, imageUrl: authData.profileImgUrl),
           Text(authData.toString())
         ])));
   }

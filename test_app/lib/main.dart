@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'auth-page.dart';
 import 'registration.dart';
 import 'auth-result.dart';
+import 'registration.dart';
 
 void main() {
   runApp(MyApp());

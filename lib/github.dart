@@ -12,7 +12,7 @@ class GithubAuth extends Visa {
   final baseUrl = 'https://github.com/login/oauth/authorize';
 
   @override
-  SimpleAuth visa;
+  SimpleAuth? visa;
 
   GithubAuth() {
     visa = SimpleAuth(
@@ -22,7 +22,7 @@ class GithubAuth extends Visa {
         /// for a token. This function gets the token and
         /// Sends a request to the user profile api endpoint.
         /// Returns an AuthData object.
-        getAuthData: (Map<String, String> oauthData) async {
+        getAuthData: (Map<String, String?> oauthData) async {
           if (debugMode) debug('In GithubAuth -> OAuth Data: $oauthData');
 
           await _getToken(oauthData);
@@ -36,12 +36,12 @@ class GithubAuth extends Visa {
               await http.get(Uri.parse(baseProfileUrl), headers: headers);
           var emailResponse = await http
               .get(Uri.parse('$baseProfileUrl/emails'), headers: headers);
-          Map<String, dynamic> profileJson = json.decode(profileResponse.body);
+          Map<String, dynamic>? profileJson = json.decode(profileResponse.body);
           if (debugMode)
             debug('In GithubAuth -> Returned Profile Json: $profileJson');
 
           List<dynamic> emailJson = json.decode(emailResponse.body);
-          String emailString;
+          String? emailString;
 
           for (var email in emailJson) {
             if (email['primary']) {
@@ -50,7 +50,7 @@ class GithubAuth extends Visa {
             }
           }
 
-          profileJson['email'] = emailString;
+          profileJson!['email'] = emailString;
           profileJson['emails'] = emailJson;
 
           if (debugMode)
@@ -63,7 +63,7 @@ class GithubAuth extends Visa {
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   AuthData authData(
-      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+      Map<String, dynamic> profileJson, Map<String, String?> oauthData) {
     var accessToken = oauthData[OAuth.TOKEN_KEY];
 
     return AuthData(
@@ -80,7 +80,7 @@ class GithubAuth extends Visa {
   /// which can be exchanged for a token. This
   /// function performs the exchange and adds the
   /// returned data to the response [oauthData] map.
-  _getToken(Map<String, String> oauthData) async {
+  _getToken(Map<String, String?> oauthData) async {
     if (debugMode) debug('In GithubAuth -> Exchanging OAuth Code For Token');
 
     var tokenEndpoint = 'https://github.com/login/oauth/access_token';
@@ -100,8 +100,8 @@ class GithubAuth extends Visa {
     var responseJson = json.decode(tokenResponse.body);
     var tokenTypeKey = 'token_type';
 
-    oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
-    oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
-    oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+    oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String?;
+    oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String?;
+    oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String?;
   }
 }

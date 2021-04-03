@@ -14,7 +14,7 @@ import 'oauth.dart';
 class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  SimpleAuth({@required this.baseUrl, @required this.getAuthData});
+  SimpleAuth({required this.baseUrl, required this.getAuthData});
 
   final String baseUrl; // OAuth base url
 
@@ -36,12 +36,12 @@ class SimpleAuth {
   /// provided credentials. Returns a WebView
   /// That's been set up for authentication
   WebView authenticate(
-      {@required String clientID,
-      String clientSecret,
-      @required String redirectUri,
-      @required String state,
-      @required String scope,
-      @required Function onDone,
+      {required String clientID,
+      String? clientSecret,
+      required String redirectUri,
+      required String state,
+      required String scope,
+      required Function onDone,
       bool newSession = false}) {
     final OAuth oAuth = OAuth(
         baseUrl: baseUrl,
@@ -58,7 +58,8 @@ class SimpleAuth {
           if (debugMode) debug('In SimpleAuth -> Response: $responseData');
 
           AuthData authData = await getAuthData(responseData);
-          if (debugMode) debug('In SimpleAuth -> Returned Authentication Data: $authData');
+          if (debugMode)
+            debug('In SimpleAuth -> Returned Authentication Data: $authData');
 
           onDone(authData);
         });

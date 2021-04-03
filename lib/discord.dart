@@ -12,7 +12,7 @@ class DiscordAuth extends Visa {
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
 
   @override
-  SimpleAuth visa;
+  SimpleAuth? visa;
 
   DiscordAuth() {
     visa = SimpleAuth(
@@ -28,11 +28,13 @@ class DiscordAuth extends Visa {
 
           // User profile API endpoint.
           var baseProfileUrl = 'https://discord.com/api/users/@me';
-          var profileResponse = await http.get(Uri.parse(baseProfileUrl), headers: {
+          var profileResponse =
+              await http.get(Uri.parse(baseProfileUrl), headers: {
             'Authorization': 'Bearer $token',
           });
           var profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In DiscordAuth -> Returned Profile Json: $profileJson');
+          if (debugMode)
+            debug('In DiscordAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
@@ -42,10 +44,11 @@ class DiscordAuth extends Visa {
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   @override
-  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    final String accessToken = oauthData[OAuth.TOKEN_KEY];
-    final String userId = profileJson['id'] as String;
-    final String avatar = profileJson['avatar'] as String;
+  AuthData authData(
+      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+    final String? accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String? userId = profileJson['id'] as String?;
+    final String? avatar = profileJson['avatar'] as String?;
     final String profileImgUrl = 'https://cdn.discordapp.com/'
         'avatars/$userId/$avatar.png';
 
@@ -53,7 +56,7 @@ class DiscordAuth extends Visa {
         clientID: oauthData['clientID'],
         accessToken: accessToken,
         userID: userId,
-        email: profileJson['email'] as String,
+        email: profileJson['email'] as String?,
         profileImgUrl: profileImgUrl,
         response: oauthData,
         userJson: profileJson);

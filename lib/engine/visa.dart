@@ -5,7 +5,7 @@ import 'simple-auth.dart';
 /// Visa abstract class
 abstract class Visa {
   /// a [SimpleAuth] instance
-  SimpleAuth visa;
+  SimpleAuth? visa;
 
   /// Debug mode?
   bool debugMode = false;
@@ -14,7 +14,7 @@ abstract class Visa {
   /// to the given value (debugMode)
   set debug(bool debugMode){
     this.debugMode = debugMode;
-    this.visa.debugMode = debugMode;
+    this.visa!.debugMode = debugMode;
   }
 
   /// This function combines information

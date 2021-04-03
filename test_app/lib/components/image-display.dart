@@ -12,7 +12,7 @@ class ImageDisplay extends StatefulWidget {
 
   @override
   _ImageDisplayState createState() {
-    return _ImageDisplayState(height!, margin!, imageUrl: imageUrl!);
+    return _ImageDisplayState(height, margin, imageUrl: imageUrl);
   }
 }
 

@@ -13,7 +13,7 @@ class GoogleAuth extends Visa {
   String personFields;
 
   @override
-  SimpleAuth visa;
+  SimpleAuth? visa;
 
   GoogleAuth({this.personFields = ""}) {
     personFields = _getPersonFields(personFields);
@@ -48,7 +48,7 @@ class GoogleAuth extends Visa {
   /// to build an [AuthData] object.
   AuthData authData(
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    final String accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String? accessToken = oauthData[OAuth.TOKEN_KEY];
 
     return AuthData(
         clientID: oauthData['clientID'],
