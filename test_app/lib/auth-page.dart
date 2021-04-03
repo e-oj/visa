@@ -13,13 +13,13 @@ import 'package:visa/google.dart';
 import 'utils.dart';
 
 class AuthPage extends StatelessWidget {
-  AuthPage({Key key, @required this.thirdParty}) : super(key: key);
+  AuthPage({Key? key, required this.thirdParty}) : super(key: key);
 
   final String thirdParty;
 
   @override
   Widget build(BuildContext context) {
-    WebView authenticate = _getThirdPartyAuth(context);
+    WebView authenticate = _getThirdPartyAuth(context)!;
 
     return Scaffold(
       appBar: Utils.getAppBar(context),
@@ -27,7 +27,7 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-  WebView _getThirdPartyAuth(context) {
+  WebView? _getThirdPartyAuth(context) {
     done(AuthData authData) {
       debug('Authentication Complete!');
       debug('Data Gathered During Authentication: $authData');
@@ -41,15 +41,21 @@ class AuthPage extends StatelessWidget {
     var googleAuth = GoogleAuth();
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
-    List<Visa> allProviders = [fbAuth, discordAuth, googleAuth, twitchAuth, githubAuth];
+    List<Visa> allProviders = [
+      fbAuth,
+      discordAuth,
+      googleAuth,
+      twitchAuth,
+      githubAuth
+    ];
 
-    for (var provider in allProviders){
+    for (var provider in allProviders) {
       provider.debug = true;
     }
 
     switch (thirdParty) {
       case 'fb':
-        return fbAuth.visa.authenticate(
+        return fbAuth.visa!.authenticate(
             clientID: '139732240983759',
             redirectUri: 'https://www.e-oj.com/oauth',
             scope: 'public_profile,email',
@@ -57,7 +63,7 @@ class AuthPage extends StatelessWidget {
             onDone: done);
 
       case 'twitch':
-        return twitchAuth.visa.authenticate(
+        return twitchAuth.visa!.authenticate(
             clientID: 'fx9d4xcwzswjzwt8cfzj8lh8paphdu',
             redirectUri: 'https://www.e-oj.com/oauth',
             state: 'twitchAuth',
@@ -65,7 +71,7 @@ class AuthPage extends StatelessWidget {
             onDone: done);
 
       case 'discord':
-        return discordAuth.visa.authenticate(
+        return discordAuth.visa!.authenticate(
             clientID: '785323970999091211',
             redirectUri: 'https://www.e-oj.com/oauth',
             state: 'discordAuth',
@@ -73,7 +79,7 @@ class AuthPage extends StatelessWidget {
             onDone: done);
 
       case 'github':
-        return githubAuth.visa.authenticate(
+        return githubAuth.visa!.authenticate(
             clientID: 'e6a01102910a7a9d694e',
             clientSecret: 'a532ab8c42e9f884f276846fc7f32e069fc0133d',
             redirectUri: 'https://www.e-oj.com/oauth',
@@ -82,7 +88,7 @@ class AuthPage extends StatelessWidget {
             onDone: done);
 
       case 'google':
-        return googleAuth.visa.authenticate(
+        return googleAuth.visa!.authenticate(
             clientID: '463257508739-c03fcu5pej7odrci1tclk53qdd'
                 'tsa0vo.apps.googleusercontent.com',
             redirectUri: 'https://www.e-oj.com/oauth',

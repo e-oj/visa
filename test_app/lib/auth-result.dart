@@ -5,7 +5,7 @@ import 'utils.dart';
 import 'app-scale.dart';
 
 class AuthResult extends StatefulWidget {
-  const AuthResult({Key key}) : super(key: key);
+  const AuthResult({Key? key}) : super(key: key);
 
   @override
   _CompleteProfileState createState() => _CompleteProfileState();
@@ -14,7 +14,8 @@ class AuthResult extends StatefulWidget {
 class _CompleteProfileState extends State<AuthResult> {
   Widget build(BuildContext context) {
     final scale = AppScale(context);
-    final AuthData authData = ModalRoute.of(context).settings.arguments;
+    final AuthData authData =
+        ModalRoute.of(context)!.settings.arguments as AuthData;
 
     return Scaffold(
         appBar: Utils.getAppBar(context),

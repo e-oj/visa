@@ -4,7 +4,7 @@ import 'utils.dart';
 import 'app-scale.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key key}) : super(key: key);
+  const RegistrationPage({Key? key}) : super(key: key);
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();

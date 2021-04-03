@@ -5,21 +5,21 @@ import 'app-scale.dart';
 
 class Utils {
   static getButton(
-      {@required String text,
-      @required VoidCallback onPressed,
+      {required String text,
+      required VoidCallback onPressed,
       double width: 0.75,
       double height: 0.055,
-      Color color,
-      Color textColor,
-      Widget icon}) {
+      Color? color,
+      Color? textColor,
+      Widget? icon}) {
     return CustomButton(
         text: text,
         onPressed: onPressed,
         width: width,
         height: height,
-        color: color,
-        textColor: textColor,
-        icon: icon);
+        color: color!,
+        textColor: textColor!,
+        icon: icon!);
   }
 
   static getAppBar(BuildContext context, {bool canGoBack = true}) {
