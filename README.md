@@ -14,6 +14,7 @@ This is an **OAuth 2.0** package that makes it super easy to add third party aut
   * [Authenticate](#step-2---authenticate)
   * [Use AuthData](#step-3---use-authdata)
   * [Rejoice!](#step-4---rejoice)
+- [Debugging](#debugging)
 - [Advanced Usage](#advanced-usage)
   * [Creating an OAuth Provider](#creating-an-oauth-provider)
   * [Constructor](#constructor)
@@ -134,6 +135,13 @@ It provides shortcuts to access **common user properties** (userId, name, email,
 
 ### Step 4 - Rejoice!
 You have successfully implemented third party auth in your app! you're one step closer to launch. Rejoice!
+
+## Debugging
+To get debug logs printed to the console, simply set the debug parameter on a provider to ```true```. Like this:
+```dart
+var fbAuth = FacebookAuth()
+fbAuth.debug = true;
+```
 
 ## Advanced Usage
 You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Have a look at the Visa interface:
