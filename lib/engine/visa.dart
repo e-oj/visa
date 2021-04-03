@@ -2,7 +2,7 @@ import 'package:visa/auth-data.dart';
 
 import 'simple-auth.dart';
 
-/// Visa interface
+/// Visa abstract class
 abstract class Visa {
   /// a [SimpleAuth] instance
   SimpleAuth visa;
@@ -10,7 +10,7 @@ abstract class Visa {
   /// Debug mode?
   bool debugMode = false;
 
-  /// Sets inDebugMode and visa.debug mode
+  /// Sets debugMode and visa.debugMode
   /// to the given value (debugMode)
   set debug(bool debugMode){
     this.debugMode = debugMode;
