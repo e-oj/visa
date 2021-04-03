@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:visa/auth-data.dart';
 import 'components/image-display.dart';
 import 'utils.dart';
-import 'app-scale.dart';
 
 class AuthResult extends StatefulWidget {
   const AuthResult({Key? key}) : super(key: key);
@@ -13,7 +12,6 @@ class AuthResult extends StatefulWidget {
 
 class _CompleteProfileState extends State<AuthResult> {
   Widget build(BuildContext context) {
-    final scale = AppScale(context);
     final AuthData authData =
         ModalRoute.of(context)!.settings.arguments as AuthData;
 
