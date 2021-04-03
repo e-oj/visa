@@ -232,6 +232,8 @@ class DiscordAuth extends Visa {
           return authData(profileJson, oauthData);
         });
   }
+  
+  // AuthData implementation...
 }
 ```
 
@@ -264,7 +266,7 @@ In some cases, the intitial request to an OAuth endpoint returns a code instead 
 exchanged for an actual api access token. Github, for instance, uses this OAuth flow and the code above needs a few adjustments to accomodate
 the intermediate step. Let's take a look at the first few lines of the getAuthData function created in the Github constructor:
 ```dart
-getAuthData(Map <String, String> data) async {
+getAuthData(Map <String, String> oauthData) async {
     if (debugMode) debug('In GithubAuth -> OAuth Data: $oauthData');
     
     // This function retrieves the access token and
