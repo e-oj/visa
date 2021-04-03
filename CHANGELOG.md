@@ -8,3 +8,7 @@
 ## [1.0.3] - 12/25/20
 * Code formatted with dartfmt
 * Shorter description in pubspec.yaml
+
+## [1.0.4] - 12/25/20
+* Added debug mode
+* Refactored 

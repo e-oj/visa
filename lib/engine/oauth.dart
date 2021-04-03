@@ -68,33 +68,39 @@ class OAuth {
         userAgent: userAgent,
         initialUrl: authUrl,
         javascriptMode: JavascriptMode.unrestricted,
-        navigationDelegate: (NavigationRequest request) {
-          String url = request.url;
+        navigationDelegate: _getNavigationDelegate(onDone));
+  }
 
-          if (debugMode) debug('In OAuth -> Inspecting Url Before Loading: $url');
+  /// Returns a navigation delegate that attempts
+  /// to match the redirect url whenever the browser
+  /// navigates to a new page. Once the redirect url
+  /// is found, it calls the [onDone] callback.
+  _getNavigationDelegate(onDone) => (NavigationRequest request) {
+        String url = request.url;
 
-          if (url.startsWith(redirectUri)) {
-            if (debugMode) debug('In OAuth -> Found Redirect Url: $url');
+        if (debugMode) debug('In OAuth -> Inspecting Url Before Loading: $url');
 
-            var returnedData = _getQueryParams(url);
-            returnedData[CLIENT_ID_KEY] = clientID;
-            returnedData[REDIRECT_URI_KEY] = redirectUri;
-            returnedData[STATE_KEY] = state;
+        if (url.startsWith(redirectUri)) {
+          if (debugMode) debug('In OAuth -> Found Redirect Url: $url');
 
-            if (clientSecret != null) {
-              returnedData[CLIENT_SECRET_KEY] = clientSecret;
-            }
+          var returnedData = _getQueryParams(url);
+          returnedData[CLIENT_ID_KEY] = clientID;
+          returnedData[REDIRECT_URI_KEY] = redirectUri;
+          returnedData[STATE_KEY] = state;
 
-            onDone(returnedData);
-          } else if (debugMode) {
-            debug('In OAuth -> Redirect Url Not Found');
-            debug('In OAuth -> Url = $url');
-            debug('In OAuth -> Redirect Url = $redirectUri');
+          if (clientSecret != null) {
+            returnedData[CLIENT_SECRET_KEY] = clientSecret;
           }
 
-          return NavigationDecision.navigate;
-        });
-  }
+          onDone(returnedData);
+        } else if (debugMode) {
+          debug('In OAuth -> Redirect Url Not Found');
+          debug('In OAuth -> Url = $url');
+          debug('In OAuth -> Redirect Url = $redirectUri');
+        }
+
+        return NavigationDecision.navigate;
+      };
 
   /// Parses url query params into a map
   /// @param url: The url to parse.
