@@ -144,20 +144,28 @@ fbAuth.debug = true;
 ```
 
 ## Advanced Usage
-You might need an OAuth provider that's not currently supported. The Visa interface and the SimpleAuth class make this possible. Have a look at the Visa interface:
+You might need an OAuth provider that's not currently supported. The Visa abstract class and the SimpleAuth class make this possible. Have a look at the abstract class:
 ```dart
-/// Visa interface
-abstract class Visa{
+/// Visa abstract class
+abstract class Visa {
   /// a [SimpleAuth] instance
   SimpleAuth visa;
 
+  /// Debug mode?
+  bool debugMode = false;
+
+  /// Sets debugMode and visa.debugMode
+  /// to the given value (debugMode)
+  set debug(bool debugMode){
+    this.debugMode = debugMode;
+    this.visa.debugMode = debugMode;
+  }
+
   /// This function combines information
-  /// from the user [json] and auth response [data]
+  /// from the user [userJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   AuthData authData(
-      Map<String, dynamic> json,
-      Map<String, String> data
-  );
+      Map<String, dynamic> userJson, Map<String, String> oauthData);
 }
 ```
 And here's the SimpleAuth constructor:
@@ -166,7 +174,7 @@ class SimpleAuth{
 
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  const SimpleAuth ({
+  SimpleAuth ({
     @required this.baseUrl, @required this.getAuthData
   });
   
@@ -183,36 +191,46 @@ class SimpleAuth{
   ///
   /// @return [AuthData]
   final Function getAuthData; 
+  
+  /// Debug mode?
+  bool debugMode = false;
 }
 ```
 
 ### Creating an OAuth Provider
-Adding a new provider simply means creating a new class that implements the visa interface. You can check out the source code for various implementations but here's the full Discord implementation as a reference.
+Adding a new provider simply means creating a new class that extends the Visa abstract class. You can check out the source code for various implementations but here's the full Discord implementation as a reference.
 
 #### Constructor:
 ```dart
 /// Enables Discord [OAuth] authentication
-class DiscordAuth implements Visa{
-  // Oauth base url.
+class DiscordAuth extends Visa {
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
+
+  @override
   SimpleAuth visa;
 
-  DiscordAuth(){
+  DiscordAuth() {
     visa = SimpleAuth(
         baseUrl: baseUrl,
+
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
-        getAuthData: (Map <String, String> data) async {
-          var token = data[OAuth.TOKEN_KEY];
+        getAuthData: (Map<String, String> oauthData) async {
+          if (debugMode) debug('In DiscordAuth -> OAuth Data: $oauthData');
+
+          var token = oauthData[OAuth.TOKEN_KEY];
+          if (debugMode) debug('In DiscordAuth -> OAuth token: $token');
+
+          // User profile API endpoint.
           var baseProfileUrl = 'https://discord.com/api/users/@me';
           var profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
           var profileJson = json.decode(profileResponse.body);
+          if (debugMode) debug('In DiscordAuth -> Returned Profile Json: $profileJson');
 
-          return authData(profileJson, data);
-        }
-    );
+          return authData(profileJson, oauthData);
+        });
   }
 }
 ```
@@ -220,28 +238,24 @@ class DiscordAuth implements Visa{
 #### authData function:
 ```dart
 /// This function combines information
-/// from the user [json] and auth response [data]
+/// from the user [profileJson] and auth response [oauthData]
 /// to build an [AuthData] object.
 @override
-AuthData authData(
-    Map<String, dynamic> json,
-    Map<String, String> data
-){
-  final String accessToken = data[OAuth.TOKEN_KEY];
-  final String userId = json['id'] as String;
-  final String avatar = json['avatar'] as String;
+AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+  final String accessToken = oauthData[OAuth.TOKEN_KEY];
+  final String userId = profileJson['id'] as String;
+  final String avatar = profileJson['avatar'] as String;
   final String profileImgUrl = 'https://cdn.discordapp.com/'
       'avatars/$userId/$avatar.png';
 
   return AuthData(
-      clientID: data['clientID'],
+      clientID: oauthData['clientID'],
       accessToken: accessToken,
       userID: userId,
-      email: json['email'] as String,
+      email: profileJson['email'] as String,
       profileImgUrl: profileImgUrl,
-      response: data,
-      userJson: json
-  );
+      response: oauthData,
+      userJson: profileJson);
 }
 ```
 
@@ -251,6 +265,8 @@ exchanged for an actual api access token. Github, for instance, uses this OAuth 
 the intermediate step. Let's take a look at the first few lines of the getAuthData function created in the Github constructor:
 ```dart
 getAuthData(Map <String, String> data) async {
+    if (debugMode) debug('In GithubAuth -> OAuth Data: $oauthData');
+    
     // This function retrieves the access token and
     // adds it to the data HashMap.
     await _getToken(data);
@@ -264,30 +280,33 @@ getAuthData(Map <String, String> data) async {
 _getToken makes the request to exchange an OAuth code for an access token.
 
 ```dart
-  /// Github's [OAuth] endpoint returns a code
-  /// which can be exchanged for a token. This
-  /// function performs the exchange and adds the
-  /// returned data to the response [data] map.
-  _getToken(Map<String, String> data) async {
-    var tokenEndpoint = 'https://github.com/login/oauth/access_token';
-    var tokenResponse = await http.post(tokenEndpoint,
-        headers: {'Accept': 'application/json',},
-        body: {
-          'client_id': data[OAuth.CLIENT_ID_KEY],
-          'client_secret': data[OAuth.CLIENT_SECRET_KEY],
-          'code': data[OAuth.CODE_KEY],
-          'redirect_uri': data[OAuth.REDIRECT_URI_KEY],
-          'state': data[OAuth.STATE_KEY]
-        });
+ /// Github's [OAuth] endpoint returns a code
+ /// which can be exchanged for a token. This
+ /// function performs the exchange and adds the
+ /// returned data to the response [data] map.
+ _getToken(Map<String, String> oauthData) async {
+   if (debugMode) debug('In GithubAuth -> Exchanging OAuth Code For Token');
 
-    var responseJson = json.decode(tokenResponse.body);
-    var tokenTypeKey = 'token_type';
+   var tokenEndpoint = 'https://github.com/login/oauth/access_token';
+   var tokenResponse = await http.post(tokenEndpoint, headers: {
+     'Accept': 'application/json',
+   }, body: {
+     'client_id': oauthData[OAuth.CLIENT_ID_KEY],
+     'client_secret': oauthData[OAuth.CLIENT_SECRET_KEY],
+     'code': oauthData[OAuth.CODE_KEY],
+     'redirect_uri': oauthData[OAuth.REDIRECT_URI_KEY],
+     'state': oauthData[OAuth.STATE_KEY]
+   });
 
-    data[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
-    data[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
-    data[tokenTypeKey] = responseJson[tokenTypeKey] as String;
-  }
-}
+   if (debugMode) debug('In GithubAuth -> Exchange Successful. Retrieved OAuth Token');
+
+   var responseJson = json.decode(tokenResponse.body);
+   var tokenTypeKey = 'token_type';
+
+   oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
+   oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
+   oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+ }
 ```
 And that's how to handle intermedite OAuth steps! If you end up creating a new provider, feel free to open a PR and I'll be happy to add it to the project.
 Happy OAuthing!
