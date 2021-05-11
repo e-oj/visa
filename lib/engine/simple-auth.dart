@@ -28,9 +28,10 @@ class SimpleAuth {
   ///
   /// @return [AuthData]
   final Function getAuthData;
-
+  
   /// Debug mode?
   bool debugMode = false;
+  final Debug _debug = Debug(prefix: 'In SimpleAuth ->');
 
   /// Creates an [OAuth] instance with the
   /// provided credentials. Returns a WebView
@@ -55,7 +56,7 @@ class SimpleAuth {
     return oAuth.authenticate(
         clearCache: newSession,
         onDone: (responseData) async {
-          if (debugMode) debug('In SimpleAuth -> Response: $responseData');
+          if (debugMode) _debug.info('Response: $responseData');
 
           final String token = responseData[OAuth.TOKEN_KEY];
           AuthData authData = token == null
@@ -63,7 +64,7 @@ class SimpleAuth {
                : await getAuthData(responseData);
 
           if (debugMode)
-            debug('In SimpleAuth -> Returned Authentication Data: $authData');
+            _debug.info('Returned Authentication Data: $authData');
 
           onDone(authData);
         });

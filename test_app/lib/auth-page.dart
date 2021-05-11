@@ -16,6 +16,7 @@ class AuthPage extends StatelessWidget {
   AuthPage({Key key, @required this.thirdParty}) : super(key: key);
 
   final String thirdParty;
+  final Debug _debug = Debug(prefix: 'In AuthPage ->');
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,8 @@ class AuthPage extends StatelessWidget {
 
   WebView _getThirdPartyAuth(context) {
     done(AuthData authData) {
-      debug('Authentication Complete!');
-      debug('Data Gathered During Authentication: $authData');
+      _debug.info('Authentication Complete!');
+      _debug.info('Data Gathered During Authentication: $authData');
 
       Navigator.pushReplacementNamed(context, '/complete-profile',
           arguments: authData);

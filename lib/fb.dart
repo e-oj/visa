@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Facebook [OAuth] authentication
 class FacebookAuth extends Visa {
   final baseUrl = 'https://www.facebook.com/v8.0/dialog/oauth';
+  final Debug _debug = Debug(prefix: 'In FacebookAuth ->');
 
   @override
   SimpleAuth visa;
@@ -21,10 +22,10 @@ class FacebookAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In FacebookAuth -> OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
           final String token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In FacebookAuth -> OAuth token: $token');
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
           final String baseProfileUrlString = 'https://graph.facebook.com/me';
@@ -36,7 +37,7 @@ class FacebookAuth extends Visa {
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
           if (debugMode)
-            debug('In FacebookAuth -> Returned Profile Json: $profileJson');
+            _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });

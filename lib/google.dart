@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Google [OAuth] authentication
 class GoogleAuth extends Visa {
   final baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+  final Debug _debug = Debug(prefix: 'In GoogleAuth ->');
   String personFields;
 
   @override
@@ -24,10 +25,10 @@ class GoogleAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In GoogleAuth -> OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
           final String token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In GoogleAuth -> OAuth token: $token');
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
           final String baseProfileUrl =
@@ -40,7 +41,7 @@ class GoogleAuth extends Visa {
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
           if (debugMode)
-            debug('In GoogleAuth -> Returned Profile Json: $profileJson');
+            _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });

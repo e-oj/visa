@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Discord [OAuth] authentication
 class TwitchAuth extends Visa {
   final baseUrl = 'https://id.twitch.tv/oauth2/authorize';
+  final Debug _debug = Debug(prefix: 'In TwitchAuth ->');
 
   @override
   SimpleAuth visa;
@@ -21,10 +22,10 @@ class TwitchAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In TwitchAuth -> OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
           final String token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In TwitchAuth -> OAuth token: $token');
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
           final Uri baseProfileUrl =
@@ -37,7 +38,7 @@ class TwitchAuth extends Visa {
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
           if (debugMode)
-            debug('In TwitchAuth -> Returned Profile Json: $profileJson');
+            _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });

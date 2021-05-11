@@ -9,7 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 /// that returns a [WebView] which has been set up
 /// for OAuth 2.0 Authentication.
 class OAuth {
-  const OAuth(
+  OAuth(
       {@required this.baseUrl,
       @required this.clientID,
       @required this.redirectUri,
@@ -34,8 +34,9 @@ class OAuth {
       'clientSecret'; // custom client secret key
   static const String REDIRECT_URI_KEY =
       'redirectURI'; // custom redirect uri key
-  final String userAgent = "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/87.0.4280.86 Mobile Safari/537.36"; // UA
+  final String userAgent = 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/87.0.4280.86 Mobile Safari/537.36'; // UA
+  final Debug _debug = Debug(prefix: 'In OAuth ->');
 
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
@@ -57,12 +58,12 @@ class OAuth {
     return WebView(
         onWebViewCreated: (controller) {
           if (clearCache) {
-            if (debugMode) debug('In OAuth -> Clearing Cache and Cookies...');
+            if (debugMode) _debug.info('Clearing Cache and Cookies...');
 
             controller.clearCache();
             CookieManager().clearCookies();
 
-            if (debugMode) debug('In OAuth -> Cache and Cookies Cleared.');
+            if (debugMode) _debug.info('Cache and Cookies Cleared.');
           }
         },
         userAgent: userAgent,
@@ -78,10 +79,10 @@ class OAuth {
   _getNavigationDelegate(onDone) => (NavigationRequest request) {
         String url = request.url;
 
-        if (debugMode) debug('In OAuth -> Inspecting Url Before Loading: $url');
+        if (debugMode) _debug.info('Inspecting Url Before Loading: $url');
 
         if (url.startsWith(redirectUri)) {
-          if (debugMode) debug('In OAuth -> Found Redirect Url: $url');
+          if (debugMode) _debug.info('Found Redirect Url: $url');
 
           var returnedData = _getQueryParams(url);
           returnedData[CLIENT_ID_KEY] = clientID;
@@ -94,9 +95,9 @@ class OAuth {
 
           onDone(returnedData);
         } else if (debugMode) {
-          debug('In OAuth -> Redirect Url Not Found');
-          debug('In OAuth -> Url = $url');
-          debug('In OAuth -> Redirect Url = $redirectUri');
+          _debug.info('Redirect Url Not Found');
+          _debug.info('Url = $url');
+          _debug.info('Redirect Url = $redirectUri');
         }
 
         return NavigationDecision.navigate;
@@ -105,7 +106,7 @@ class OAuth {
   /// Parses url query params into a map
   /// @param url: The url to parse.
   Map<String, String> _getQueryParams(String url) {
-    if (debugMode) debug('In OAuth -> Getting Query Params From Url: $url');
+    if (debugMode) _debug.info('Getting Query Params From Url: $url');
 
     final List<String> urlParams = url.split(RegExp('[?&# ]'));
     final Map<String, String> queryParams = HashMap();
@@ -118,7 +119,7 @@ class OAuth {
       queryParams[parts[0]] = Uri.decodeFull(parts[1]);
     }
 
-    if (debugMode) debug('In OAuth -> Extracted Query Params: $queryParams');
+    if (debugMode) _debug.info('Extracted Query Params: $queryParams');
     return queryParams;
   }
 }
