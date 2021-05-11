@@ -28,11 +28,14 @@ class DiscordAuth extends Visa {
 
           // User profile API endpoint.
           final Uri profileUrl = Uri.parse('https://discord.com/api/users/@me');
-          final http.Response profileResponse = await http.get(profileUrl, headers: {
+          final http.Response profileResponse =
+              await http.get(profileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
-          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In DiscordAuth -> Returned Profile Json: $profileJson');
+          final Map<String, dynamic> profileJson =
+              json.decode(profileResponse.body);
+          if (debugMode)
+            debug('In DiscordAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
@@ -42,7 +45,8 @@ class DiscordAuth extends Visa {
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   @override
-  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+  AuthData authData(
+      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
     final String userId = profileJson['id'] as String;
     final String avatar = profileJson['avatar'] as String;

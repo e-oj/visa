@@ -1,3 +1,3 @@
-debug(String s){
+debug(String s) {
   print('--VISA-DEBUG: $s');
 }

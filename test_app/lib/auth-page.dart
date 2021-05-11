@@ -41,9 +41,15 @@ class AuthPage extends StatelessWidget {
     var googleAuth = GoogleAuth();
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
-    List<Visa> allProviders = [fbAuth, discordAuth, googleAuth, twitchAuth, githubAuth];
+    List<Visa> allProviders = [
+      fbAuth,
+      discordAuth,
+      googleAuth,
+      twitchAuth,
+      githubAuth
+    ];
 
-    for (var provider in allProviders){
+    for (var provider in allProviders) {
       provider.debug = true;
     }
 

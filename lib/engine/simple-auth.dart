@@ -58,7 +58,8 @@ class SimpleAuth {
           if (debugMode) debug('In SimpleAuth -> Response: $responseData');
 
           AuthData authData = await getAuthData(responseData);
-          if (debugMode) debug('In SimpleAuth -> Returned Authentication Data: $authData');
+          if (debugMode)
+            debug('In SimpleAuth -> Returned Authentication Data: $authData');
 
           onDone(authData);
         });

@@ -33,8 +33,10 @@ class FacebookAuth extends Visa {
               '&fields=first_name,last_name,email');
 
           final http.Response profileResponse = await http.get(profileUrl);
-          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In FacebookAuth -> Returned Profile Json: $profileJson');
+          final Map<String, dynamic> profileJson =
+              json.decode(profileResponse.body);
+          if (debugMode)
+            debug('In FacebookAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
