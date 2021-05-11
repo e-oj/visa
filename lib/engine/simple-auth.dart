@@ -57,7 +57,11 @@ class SimpleAuth {
         onDone: (responseData) async {
           if (debugMode) debug('In SimpleAuth -> Response: $responseData');
 
-          AuthData authData = await getAuthData(responseData);
+          final String token = responseData[OAuth.TOKEN_KEY];
+          AuthData authData = token == null
+               ? AuthData(response: responseData)
+               : await getAuthData(responseData);
+
           if (debugMode)
             debug('In SimpleAuth -> Returned Authentication Data: $authData');
 
