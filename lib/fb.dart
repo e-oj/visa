@@ -27,13 +27,13 @@ class FacebookAuth extends Visa {
           if (debugMode) debug('In FacebookAuth -> OAuth token: $token');
 
           // User profile API endpoint.
-          final String baseProfileUrl = 'https://graph.facebook.com/me';
-          final Uri profileUrl = Uri.parse('$baseProfileUrl'
+          final String baseProfileUrlString = 'https://graph.facebook.com/me';
+          final Uri profileUrl = Uri.parse('$baseProfileUrlString'
               '?access_token=$token'
               '&fields=first_name,last_name,email');
 
           final http.Response profileResponse = await http.get(profileUrl);
-          var profileJson = json.decode(profileResponse.body);
+          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In FacebookAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
