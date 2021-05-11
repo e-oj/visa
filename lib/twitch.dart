@@ -23,7 +23,7 @@ class TwitchAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) debug('In TwitchAuth -> OAuth Data: $oauthData');
 
-          var token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) debug('In TwitchAuth -> OAuth token: $token');
           
           // User profile API endpoint.
@@ -32,7 +32,7 @@ class TwitchAuth extends Visa {
             'Authorization': 'Bearer $token',
             'Client-Id': oauthData['clientID']
           });
-          var profileJson = json.decode(profileResponse.body);
+          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In TwitchAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
@@ -44,7 +44,7 @@ class TwitchAuth extends Visa {
   /// to build an [AuthData] object.
   AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
-    Map<String, dynamic> user = profileJson['data'][0];
+    final Map<String, dynamic> user = profileJson['data'][0];
 
     return AuthData(
         clientID: oauthData['clientID'],
