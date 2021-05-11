@@ -31,19 +31,18 @@ class GithubAuth extends Visa {
 
           // User profile API endpoint.
           final String baseProfileUrlString = 'https://api.github.com/user';
-          final Map<String, String> headers = {'Authorization': 'token $token'};
-          final http.Response profileResponse =
-              await http.get(Uri.parse(baseProfileUrlString), headers: headers);
+          final Uri profileUrl = Uri.parse(baseProfileUrlString);
           final Uri emailUrl = Uri.parse('$baseProfileUrlString/emails');
-          final http.Response emailResponse =
-              await http.get(emailUrl, headers: headers);
-          Map<String, dynamic> profileJson = json.decode(profileResponse.body);
+          final Map<String, String> headers = {'Authorization': 'token $token'};
+
+          final http.Response profileResponse = await http.get(profileUrl, headers: headers);
+          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In GithubAuth -> Returned Profile Json: $profileJson');
+
+          final http.Response emailResponse = await http.get(emailUrl, headers: headers);
+          final List<dynamic> emailJson = json.decode(emailResponse.body);
           if (debugMode) debug('In GithubAuth -> Returned Email Response: ${emailResponse.body}');
 
-          print(emailResponse.body);
-
-          List<dynamic> emailJson = json.decode(emailResponse.body);
           String emailString;
 
           for (var email in emailJson) {
@@ -65,7 +64,7 @@ class GithubAuth extends Visa {
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    var accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String accessToken = oauthData[OAuth.TOKEN_KEY];
 
     return AuthData(
         clientID: oauthData[OAuth.CLIENT_ID_KEY],
@@ -85,7 +84,7 @@ class GithubAuth extends Visa {
     if (debugMode) debug('In GithubAuth -> Exchanging OAuth Code For Token');
 
     final Uri tokenEndpoint = Uri.parse('https://github.com/login/oauth/access_token');
-    var tokenResponse = await http.post(tokenEndpoint, headers: {
+    final http.Response tokenResponse = await http.post(tokenEndpoint, headers: {
       'Accept': 'application/json',
     }, body: {
       'client_id': oauthData[OAuth.CLIENT_ID_KEY],
@@ -97,8 +96,8 @@ class GithubAuth extends Visa {
 
     if (debugMode) debug('In GithubAuth -> Exchange Successful. Retrieved OAuth Token');
 
-    var responseJson = json.decode(tokenResponse.body);
-    var tokenTypeKey = 'token_type';
+    final Map<String, dynamic> responseJson = json.decode(tokenResponse.body);
+    final String tokenTypeKey = 'token_type';
 
     oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
     oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
