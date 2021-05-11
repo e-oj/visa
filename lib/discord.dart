@@ -23,7 +23,7 @@ class DiscordAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) debug('In DiscordAuth -> OAuth Data: $oauthData');
 
-          var token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) debug('In DiscordAuth -> OAuth token: $token');
 
           // User profile API endpoint.
@@ -31,7 +31,7 @@ class DiscordAuth extends Visa {
           final http.Response profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
-          var profileJson = json.decode(profileResponse.body);
+          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In DiscordAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
