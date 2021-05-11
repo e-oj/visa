@@ -27,8 +27,8 @@ class TwitchAuth extends Visa {
           if (debugMode) debug('In TwitchAuth -> OAuth token: $token');
           
           // User profile API endpoint.
-          var baseProfileUrl = 'https://api.twitch.tv/helix/users';
-          var profileResponse = await http.get(baseProfileUrl, headers: {
+          final Uri baseProfileUrl = Uri.parse('https://api.twitch.tv/helix/users');
+          final http.Response profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
             'Client-Id': oauthData['clientID']
           });

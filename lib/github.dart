@@ -26,18 +26,22 @@ class GithubAuth extends Visa {
           if (debugMode) debug('In GithubAuth -> OAuth Data: $oauthData');
 
           await _getToken(oauthData);
-          var token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) debug('In GithubAuth -> OAuth token: $token');
 
           // User profile API endpoint.
-          var baseProfileUrl = 'https://api.github.com/user';
-          var headers = {'Authorization': 'token $token'};
-          var profileResponse =
-              await http.get(baseProfileUrl, headers: headers);
-          var emailResponse =
-              await http.get('$baseProfileUrl/emails', headers: headers);
+          final String baseProfileUrlString = 'https://api.github.com/user';
+          final Map<String, String> headers = {'Authorization': 'token $token'};
+          final http.Response profileResponse =
+              await http.get(Uri.parse(baseProfileUrlString), headers: headers);
+          final Uri emailUrl = Uri.parse('$baseProfileUrlString/emails');
+          final http.Response emailResponse =
+              await http.get(emailUrl, headers: headers);
           Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In GithubAuth -> Returned Profile Json: $profileJson');
+          if (debugMode) debug('In GithubAuth -> Returned Email Response: ${emailResponse.body}');
+
+          print(emailResponse.body);
 
           List<dynamic> emailJson = json.decode(emailResponse.body);
           String emailString;
@@ -80,7 +84,7 @@ class GithubAuth extends Visa {
   _getToken(Map<String, String> oauthData) async {
     if (debugMode) debug('In GithubAuth -> Exchanging OAuth Code For Token');
 
-    var tokenEndpoint = 'https://github.com/login/oauth/access_token';
+    final Uri tokenEndpoint = Uri.parse('https://github.com/login/oauth/access_token');
     var tokenResponse = await http.post(tokenEndpoint, headers: {
       'Accept': 'application/json',
     }, body: {

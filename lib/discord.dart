@@ -27,8 +27,8 @@ class DiscordAuth extends Visa {
           if (debugMode) debug('In DiscordAuth -> OAuth token: $token');
 
           // User profile API endpoint.
-          var baseProfileUrl = 'https://discord.com/api/users/@me';
-          var profileResponse = await http.get(baseProfileUrl, headers: {
+          final Uri baseProfileUrl = Uri.parse('https://discord.com/api/users/@me');
+          final http.Response profileResponse = await http.get(baseProfileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
           var profileJson = json.decode(profileResponse.body);

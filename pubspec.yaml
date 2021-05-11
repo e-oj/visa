@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hexcolor: ^1.0.4
-  http: ^0.12.2
-  webview_flutter: ^1.0.7
+  hexcolor: ^2.0.3
+  http: ^0.13.3
+  webview_flutter: ^2.0.4
 
 # TODO - move hexcolor to dev_dependencies
 dev_dependencies:
