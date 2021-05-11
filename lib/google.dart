@@ -26,7 +26,7 @@ class GoogleAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) debug('In GoogleAuth -> OAuth Data: $oauthData');
           
-          var token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) debug('In GoogleAuth -> OAuth token: $token');
 
           // User profile API endpoint.
@@ -35,7 +35,7 @@ class GoogleAuth extends Visa {
 
           final http.Response profileResponse = await http
               .get(profileUrl, headers: {'Authorization': 'Bearer $token'});
-          var profileJson = json.decode(profileResponse.body);
+          final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
           if (debugMode) debug('In GoogleAuth -> Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
@@ -63,8 +63,8 @@ class GoogleAuth extends Visa {
   /// Merges the provided personFields with
   /// the default personFields.
   _getPersonFields(String fields) {
+    final Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
     Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
-    Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
 
     defaultFields.addAll(inputFields);
 
