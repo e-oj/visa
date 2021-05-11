@@ -64,7 +64,7 @@ class GoogleAuth extends Visa {
   /// the default personFields.
   _getPersonFields(String fields) {
     final Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
-    Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
+    final Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
 
     defaultFields.addAll(inputFields);
 
