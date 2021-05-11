@@ -22,10 +22,10 @@ class DiscordAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode)_debug.info('OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
           final String token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode)_debug.info('OAuth token: $token');
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
           final Uri profileUrl = Uri.parse('https://discord.com/api/users/@me');
@@ -35,8 +35,7 @@ class DiscordAuth extends Visa {
           });
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
-          if (debugMode)
-           _debug.info('Returned Profile Json: $profileJson');
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });

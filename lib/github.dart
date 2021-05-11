@@ -40,8 +40,7 @@ class GithubAuth extends Visa {
               await http.get(profileUrl, headers: headers);
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
-          if (debugMode)
-            _debug.info('Returned Profile Json: $profileJson');
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           final http.Response emailResponse =
               await http.get(emailUrl, headers: headers);
@@ -62,8 +61,7 @@ class GithubAuth extends Visa {
           profileJson['email'] = emailString;
           profileJson['emails'] = emailJson;
 
-          if (debugMode)
-            _debug.info('Modified Profile Json: $profileJson');
+          if (debugMode) _debug.info('Modified Profile Json: $profileJson');
           return authData(profileJson, oauthData);
         });
   }
@@ -105,8 +103,7 @@ class GithubAuth extends Visa {
       'state': oauthData[OAuth.STATE_KEY]
     });
 
-    if (debugMode)
-      _debug.info('Exchange Successful. Retrieved OAuth Token');
+    if (debugMode) _debug.info('Exchange Successful. Retrieved OAuth Token');
 
     final Map<String, dynamic> responseJson = json.decode(tokenResponse.body);
     final String tokenTypeKey = 'token_type';

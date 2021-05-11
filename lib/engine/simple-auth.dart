@@ -28,7 +28,7 @@ class SimpleAuth {
   ///
   /// @return [AuthData]
   final Function getAuthData;
-  
+
   /// Debug mode?
   bool debugMode = false;
   final Debug _debug = Debug(prefix: 'In SimpleAuth ->');
@@ -60,11 +60,10 @@ class SimpleAuth {
 
           final String token = responseData[OAuth.TOKEN_KEY];
           AuthData authData = token == null
-               ? AuthData(response: responseData)
-               : await getAuthData(responseData);
+              ? AuthData(response: responseData)
+              : await getAuthData(responseData);
 
-          if (debugMode)
-            _debug.info('Returned Authentication Data: $authData');
+          if (debugMode) _debug.info('Returned Authentication Data: $authData');
 
           onDone(authData);
         });

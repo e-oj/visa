@@ -37,8 +37,7 @@ class TwitchAuth extends Visa {
               });
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
-          if (debugMode)
-            _debug.info('Returned Profile Json: $profileJson');
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
