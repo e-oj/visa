@@ -26,8 +26,9 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
 
-# To add assets to your package, add an assets section, like this:
-# assets:
+  # To add assets to your package, add an assets section, like this:
+  assets:
+    - packages/visa/html/apple-auth.html
 #   - images/a_dot_burr.jpeg
 #   - images/a_dot_ham.jpeg
 #

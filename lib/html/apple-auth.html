@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            AppleID.auth.init({
+                clientId : '%CLIENT_ID%',
+                scope : '%SCOPE%',
+                redirectURI : '%REDIRECT_URI%',
+                state : '%STATE%',
+                usePopup : true //or false defaults to false
+            });
+
+            AppleID.auth.signIn()
+                .then(function(data){
+                    localStorage.setItem('authData', JSON.stringify(data))
+                    location.replace(`%REDIRECT_URI%`);
+                })
+                .catch(function(err){
+                    localStorage.setItem("authError", err.error);
+                });
+        </script>
+    </body>
+</html>

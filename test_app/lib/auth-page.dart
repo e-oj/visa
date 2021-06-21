@@ -9,6 +9,7 @@ import 'package:visa/discord.dart';
 import 'package:visa/twitch.dart';
 import 'package:visa/github.dart';
 import 'package:visa/google.dart';
+import 'package:visa/apple.dart';
 
 import 'utils.dart';
 
@@ -40,6 +41,7 @@ class AuthPage extends StatelessWidget {
     var fbAuth = FacebookAuth();
     var discordAuth = DiscordAuth();
     var googleAuth = GoogleAuth();
+    var appleAuth = AppleAuth();
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
     List<Visa> allProviders = [
@@ -96,6 +98,21 @@ class AuthPage extends StatelessWidget {
             state: 'googleAuth',
             scope: 'https://www.googleapis.com/auth/user.emails.read '
                 'https://www.googleapis.com/auth/userinfo.profile',
+            onDone: done);
+
+      case 'apple':
+        return appleAuth.visa.authenticate(
+            clientID: 'com.visa.mobile',
+            clientSecret: 'eyJhbGciOiJFUzI1NiIsInR5cCI6I'
+                'kpXVCIsImtpZCI6IlIyUUpYQTM1M0IifQ.eyJpc3Mi'
+                'OiJLNDVDVDlWMjk5IiwiZXhwIjoxNjI0ODQyMDg1LCJhd'
+                'WQiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwic3ViIjoiY'
+                '29tLnZpc2EubW9iaWxlIiwiaWF0IjoxNjI0MjM3Mjg1fQ.UdQ1RcTFEN5B'
+                '7m2I-GgMuL-2G3QpMKMoZ7xxFxlxhs9E-5D6wsUJk9HJbXDFxk70dhj_'
+                'XVBa_miYoroZGOsnpA',
+            redirectUri: 'https://www.e-oj.com/oauth',
+            state: 'appleAuth',
+            scope: 'name email',
             onDone: done);
       default:
         return null;
