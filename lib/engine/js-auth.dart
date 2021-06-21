@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:visa/engine/debug.dart';
@@ -55,10 +54,20 @@ class JSAuth {
             redirectUri: redirectUri,
             state: state,
             scope: scope);
-        // onDone(getAuthData({"-": "-"}));
       },
     );
   }
+
+  jsAuthMessageHandler(onDone) => (String message){
+    List<String> parts = message.split(':');
+    String msgType = parts[0];
+    Map<String, dynamic> response = jsonDecode(parts[1]);
+    AuthData authData = msgType == 'ERROR'
+        ? AuthData(response: response)
+        : getAuthData(response);
+
+    onDone(authData);
+  };
 
   _loadHtml(
       {@required String clientID,

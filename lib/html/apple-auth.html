@@ -17,8 +17,8 @@
                     localStorage.setItem('authData', JSON.stringify(data))
                     location.replace(`%REDIRECT_URI%`);
                 })
-                .catch(function(err){
-                    localStorage.setItem("authError", err.error);
+                .catch(function(error){
+                    localStorage.setItem("authError", JSON.stringify(error));
                 });
         </script>
     </body>

@@ -59,7 +59,9 @@ class SimpleAuth {
           if (debugMode) _debug.info('Response: $responseData');
 
           final String token = responseData[OAuth.TOKEN_KEY];
-          AuthData authData = token == null
+          final String code = responseData[OAuth.CODE_KEY];
+
+          AuthData authData = token == null && code == null
               ? AuthData(response: responseData)
               : await getAuthData(responseData);
 
