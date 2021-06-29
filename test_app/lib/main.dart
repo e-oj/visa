@@ -31,9 +31,8 @@ class MyApp extends StatelessWidget {
             AuthPage(thirdParty: 'discord'),
         '/github-auth': (BuildContext context) =>
             AuthPage(thirdParty: 'github'),
-        '/google-auth': (BuildContext context) => AuthPage(thirdParty: 'google'),
-        '/apple-auth': (BuildContext context) => AuthPage(thirdParty: 'apple')
-      },
+        '/google-auth': (BuildContext context) => AuthPage(thirdParty: 'google')
+      }
     );
   }
 }

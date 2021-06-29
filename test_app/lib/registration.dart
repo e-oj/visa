@@ -62,13 +62,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         color: HexColor('#4285F4'),
                         textColor: Colors.white,
                         onPressed: () =>
-                            Navigator.pushNamed(context, '/google-auth')),
-                    Utils.getButton(
-                        text: 'Sign up with Apple',
-                        color: HexColor('#000000'),
-                        textColor: Colors.white,
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/apple-auth'))
+                            Navigator.pushNamed(context, '/google-auth'))
                   ])))),
     );
   }
