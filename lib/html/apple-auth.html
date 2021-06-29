@@ -1,8 +1,17 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://appleid.cdn-apple.com">
         <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+        <style>
+    		button{
+    			width: 100px;
+    			height: 50px;
+    		}
+    	</style>
     </head>
     <body>
+        <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
         <script type="text/javascript">
             AppleID.auth.init({
                 clientId : '%CLIENT_ID%',
@@ -12,14 +21,7 @@
                 usePopup : true //or false defaults to false
             });
 
-            AppleID.auth.signIn()
-                .then(function(data){
-                    localStorage.setItem('authData', JSON.stringify(data))
-                    location.replace(`%REDIRECT_URI%`);
-                })
-                .catch(function(error){
-                    localStorage.setItem("authError", JSON.stringify(error));
-                });
+            Visa.postMessage('Initialization Complete!');
         </script>
     </body>
 </html>

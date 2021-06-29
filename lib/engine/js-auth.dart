@@ -44,9 +44,13 @@ class JSAuth {
       @required String scope,
       @required Function onDone,
       bool newSession = false}) {
+    JavascriptChannel jsChannel = JavascriptChannel(
+        name: 'Visa', onMessageReceived: _jsAuthMessageHandler(onDone));
+
     return WebView(
       initialUrl: '',
       javascriptMode: JavascriptMode.unrestricted,
+      javascriptChannels: <JavascriptChannel>{jsChannel},
       onWebViewCreated: (WebViewController controller) async {
         _webviewController = controller;
         await _loadHtml(
@@ -58,34 +62,40 @@ class JSAuth {
     );
   }
 
-  jsAuthMessageHandler(onDone) => (String message){
-    List<String> parts = message.split(':');
-    String msgType = parts[0];
-    Map<String, dynamic> response = jsonDecode(parts[1]);
-    AuthData authData = msgType == 'ERROR'
-        ? AuthData(response: response)
-        : getAuthData(response);
+  _jsAuthMessageHandler(onDone) => (JavascriptMessage jsMessage) {
+        List<String> parts = jsMessage.message.split(':');
 
-    onDone(authData);
-  };
+        if(parts.length < 2){
+          _debug.info('JS MESSAGE: ${jsMessage.message}');
+          return;
+        }
+
+        String msgType = parts[0];
+        Map<String, dynamic> response = jsonDecode(parts[1]);
+        AuthData authData = msgType == 'ERROR'
+            ? AuthData(response: response)
+            : getAuthData(response);
+
+        onDone(authData);
+      };
 
   _loadHtml(
       {@required String clientID,
       @required String redirectUri,
       @required String state,
       @required String scope}) async {
-    String htmlPath = 'packages/visa/html/apple-auth.html';
+    String htmlPath = this.htmlSource;
     print(htmlPath);
 
     String markup = await rootBundle.loadString(htmlPath);
     markup = markup.replaceFirst('%CLIENT_ID%', clientID);
     markup = markup.replaceFirst('%STATE%', state);
     markup = markup.replaceFirst('%SCOPE%', scope);
-    markup = markup.replaceAll('%REDIRECT_URI', redirectUri);
+    markup = markup.replaceAll('%REDIRECT_URI%', redirectUri);
 
     print('loaded: $markup');
-    // _webviewController.loadUrl(Uri.dataFromString(markup,
-    //         mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-    //     .toString());
+    _webviewController.loadUrl(Uri.dataFromString(markup,
+            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+        .toString());
   }
 }

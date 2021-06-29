@@ -2,8 +2,8 @@ import 'package:visa/auth-data.dart';
 import 'package:visa/engine/js-auth.dart';
 
 class AppleAuth {
-  final String baseUrl = "";
-  final String sourceFile = "apple-auth.html";
+  final String baseUrl = '';
+  final String sourceFile = 'packages/visa/html/apple-auth.html';
 
   JSAuth visa;
 
@@ -11,7 +11,9 @@ class AppleAuth {
     visa = JSAuth(
         baseUrl: baseUrl,
         htmlSource: sourceFile,
-        getAuthData: (Map<String, String> data) {
+        getAuthData: (Map<String, dynamic> data) {
+          print('Apple auth data: $data');
+
           return AuthData(
               accessToken: "",
               email: "",
