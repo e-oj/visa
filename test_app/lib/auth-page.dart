@@ -9,6 +9,7 @@ import 'package:visa/discord.dart';
 import 'package:visa/twitch.dart';
 import 'package:visa/github.dart';
 import 'package:visa/google.dart';
+import 'package:visa/linkedin.dart';
 
 import 'utils.dart';
 
@@ -42,12 +43,14 @@ class AuthPage extends StatelessWidget {
     var googleAuth = GoogleAuth();
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
+    var linkedInAuth = LinkedInAuth();
     List<Visa> allProviders = [
       fbAuth,
       discordAuth,
       googleAuth,
       twitchAuth,
-      githubAuth
+      githubAuth,
+      linkedInAuth
     ];
 
     for (var provider in allProviders) {
@@ -98,6 +101,14 @@ class AuthPage extends StatelessWidget {
                 'https://www.googleapis.com/auth/userinfo.profile',
             onDone: done);
 
+      case 'linkedIn':
+        return linkedInAuth.visa.authenticate(
+            clientID: '78lyweifjuavwi',
+            clientSecret: 'SbUU4yfIdEghTeb8',
+            redirectUri: 'https://www.e-oj.com/oauth',
+            state: 'linkedInAuth',
+            scope: 'r_liteprofile r_emailaddress',
+            onDone: done);
       default:
         return null;
     }

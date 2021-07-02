@@ -14,9 +14,11 @@ import 'oauth.dart';
 class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  SimpleAuth({@required this.baseUrl, @required this.getAuthData});
+  SimpleAuth(
+      {@required this.baseUrl, @required this.getAuthData, this.responseType});
 
   final String baseUrl; // OAuth base url
+  final String responseType;
 
   /// This function makes the necessary api calls to
   /// get a user's profile data. It accepts a single
@@ -47,10 +49,11 @@ class SimpleAuth {
     final OAuth oAuth = OAuth(
         baseUrl: baseUrl,
         clientID: clientID,
+        clientSecret: clientSecret,
         redirectUri: redirectUri,
         state: state,
         scope: scope,
-        clientSecret: clientSecret,
+        responseType: responseType,
         debugMode: debugMode);
 
     return oAuth.authenticate(

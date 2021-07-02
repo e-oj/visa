@@ -16,11 +16,13 @@ class OAuth {
       @required this.state,
       @required this.scope,
       @required this.debugMode,
-      this.clientSecret});
+      this.clientSecret,
+      this.responseType});
 
   final String baseUrl; // OAuth url
   final String clientID; // OAuth clientID
   final String clientSecret; // OAuth clientSecret
+  final String responseType; // OAuth clientSecret
   final String redirectUri; // OAuth redirectUri
   final String state; // OAuth state
   final String scope; // OAuth scope
@@ -44,6 +46,8 @@ class OAuth {
   WebView authenticate({@required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
+    String responseTypeQuery =
+        '&response_type=${responseType == null ? 'token' : responseType}';
 
     String authUrl = '$baseUrl'
         '?client_id=$clientID'
@@ -51,7 +55,7 @@ class OAuth {
         '&redirect_uri=$redirectUri'
         '&state=$state'
         '&scope=$scope'
-        '&response_type=token';
+        '$responseTypeQuery';
 
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
