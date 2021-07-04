@@ -30,39 +30,18 @@ class LinkedInAuth extends Visa {
           await _getToken(oauthData);
           final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) _debug.info('OAuth token: $token');
-          //
-          // // User profile API endpoint.
-          // final String baseProfileUrlString = 'GET https://api.linkedin.com/v2/me';
-          // final Uri profileUrl = Uri.parse(baseProfileUrlString);
-          // final Uri emailUrl = Uri.parse('$baseProfileUrlString/emails');
-          // final Map<String, String> headers = {'Authorization': 'token $token'};
-          //
-          // final http.Response profileResponse =
-          // await http.get(profileUrl, headers: headers);
-          // final Map<String, dynamic> profileJson =
-          // json.decode(profileResponse.body);
-          // if (debugMode) _debug.info('Returned Profile Json: $profileJson');
-          //
-          // final http.Response emailResponse =
-          // await http.get(emailUrl, headers: headers);
-          // final List<dynamic> emailJson = json.decode(emailResponse.body);
-          // if (debugMode)
-          //   _debug.info(
-          //       'In GithubAuth -> Returned Email Response: ${emailResponse.body}');
-          //
-          // if (debugMode) _debug.info('Modified Profile Json: $profileJson');
-          // return authData(profileJson, oauthData);
-          return AuthData(
-            accessToken: '',
-            email: '',
-            firstName: '',
-            userID: '',
-            lastName: '',
-            profileImgUrl: '',
-            userJson: {},
-            clientID: '',
-            response: oauthData
-          );
+
+          final String baseApiUrl = 'https://api.linkedin.com/v2';
+          final Map<String, String> headers = {
+            'Authorization': 'Bearer $token'
+          };
+          final Map<String, dynamic> profileJson = await _getProfile(baseApiUrl, headers);
+          final Map<String, dynamic> emailJson = await _getEmail(baseApiUrl, headers);
+
+          profileJson['emailJson'] = emailJson;
+          if (debugMode) _debug.info('Modified Profile Json: $profileJson');
+
+          return authData(profileJson, oauthData);
         });
   }
 
@@ -73,12 +52,16 @@ class LinkedInAuth extends Visa {
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
 
+    _debug.info('Authdata email json: ${profileJson['emailJson']}');
+
     return AuthData(
         clientID: oauthData[OAuth.CLIENT_ID_KEY],
         accessToken: accessToken,
-        userID: profileJson['id'].toString(),
-        email: profileJson['email'],
-        profileImgUrl: profileJson['avatar_url'],
+        userID: profileJson['id'],
+        firstName: profileJson['localizedFirstName'],
+        lastName: profileJson['localizedLastName'],
+        email: profileJson['emailJson']['email'],
+        profileImgUrl: profileJson['profileImage'],
         response: oauthData,
         userJson: profileJson);
   }
@@ -91,9 +74,9 @@ class LinkedInAuth extends Visa {
     if (debugMode) _debug.info('Exchanging OAuth Code For Token');
 
     final Uri tokenEndpoint =
-    Uri.parse('https://www.linkedin.com/oauth/v2/accessToken');
+        Uri.parse('https://www.linkedin.com/oauth/v2/accessToken');
     final http.Response tokenResponse =
-    await http.post(tokenEndpoint, headers: {
+        await http.post(tokenEndpoint, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
     }, body: {
@@ -113,5 +96,61 @@ class LinkedInAuth extends Visa {
 
     oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY];
     oauthData[expiryKey] = responseJson[expiryKey].toString();
+  }
+
+  Future<Map<String, dynamic>> _getProfile(
+      String baseApiUrl, Map<String, String> headers) async {
+    // User profile API endpoint.
+    final String profileUrlString = '$baseApiUrl/me?projection='
+        '(id,localizedFirstName,localizedLastName,'
+        'profilePicture('
+        'displayImage~digitalmediaAsset:playableStreams'
+        '(elements)))';
+    final Uri profileUrl = Uri.parse(profileUrlString);
+    final http.Response profileResponse =
+        await http.get(profileUrl, headers: headers);
+    final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
+
+    if (debugMode) {
+      _debug.info('Returned Profile Json: $profileJson');
+    }
+
+    profileJson['profileImage'] = profileJson['profilePicture']['displayImage~']
+        ['elements'][0]['identifiers'][0]['identifier'];
+
+    return profileJson;
+  }
+
+  Future<Map<String, dynamic>> _getEmail(
+      String baseApiUrl, Map<String, String> headers) async {
+    // User email API endpoint.
+    final String emailUrlString = '$baseApiUrl/clientAwareMemberHandles?'
+        'q=members&projection=(elements*(primary,type,handle~))';
+    final Uri emailUrl = Uri.parse(emailUrlString);
+    final http.Response emailResponse =
+        await http.get(emailUrl, headers: headers);
+    final Map<String, dynamic> emailJson = json.decode(emailResponse.body);
+
+    if (debugMode) {
+      _debug.info('Returned Email Response: ${emailResponse.body}');
+    }
+
+    String email;
+    List<dynamic> elements = emailJson['elements'];
+
+    for (Map<String, dynamic> contact in elements) {
+      if (contact['type'] == 'EMAIL' && contact['primary'] == true) {
+        email = contact['handle~']['emailAddress'];
+        break;
+      }
+    }
+
+    if (debugMode) {
+      _debug.info('Returned Email: $email}');
+    }
+
+    emailJson['email'] = email;
+
+    return emailJson;
   }
 }

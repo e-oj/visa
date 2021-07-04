@@ -38,7 +38,8 @@ class _ImageDisplayState extends State<ImageDisplay> {
         margin: margin,
         decoration: BoxDecoration(
           image: imageUrl != null
-              ? DecorationImage(image: NetworkImage(imageUrl))
+              ? DecorationImage(
+                  image: NetworkImage(imageUrl), fit: BoxFit.cover)
               : null,
           borderRadius: BorderRadius.all(Radius.circular(500)),
           color: HexColor('#f2f2f2'),
