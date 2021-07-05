@@ -35,8 +35,10 @@ class LinkedInAuth extends Visa {
           final Map<String, String> headers = {
             'Authorization': 'Bearer $token'
           };
-          final Map<String, dynamic> profileJson = await _getProfile(baseApiUrl, headers);
-          final Map<String, dynamic> emailJson = await _getEmail(baseApiUrl, headers);
+          final Map<String, dynamic> profileJson =
+              await _getProfile(baseApiUrl, headers);
+          final Map<String, dynamic> emailJson =
+              await _getEmail(baseApiUrl, headers);
 
           profileJson['emailJson'] = emailJson;
           if (debugMode) _debug.info('Modified Profile Json: $profileJson');
@@ -51,8 +53,6 @@ class LinkedInAuth extends Visa {
   AuthData authData(
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
-
-    _debug.info('Authdata email json: ${profileJson['emailJson']}');
 
     return AuthData(
         clientID: oauthData[OAuth.CLIENT_ID_KEY],
@@ -98,6 +98,10 @@ class LinkedInAuth extends Visa {
     oauthData[expiryKey] = responseJson[expiryKey].toString();
   }
 
+  /// Get's a user's LinkedIn profile data and
+  /// isolates the profile image.
+  /// [baseApiUrl] - LinkedIn base api url
+  /// [headers] - request header with auth token
   Future<Map<String, dynamic>> _getProfile(
       String baseApiUrl, Map<String, String> headers) async {
     // User profile API endpoint.
@@ -121,6 +125,10 @@ class LinkedInAuth extends Visa {
     return profileJson;
   }
 
+  /// Get's a user's LinkedIn email data and
+  /// isolates the primary email address.
+  /// [baseApiUrl] - LinkedIn base api url
+  /// [headers] - request header with auth token
   Future<Map<String, dynamic>> _getEmail(
       String baseApiUrl, Map<String, String> headers) async {
     // User email API endpoint.
