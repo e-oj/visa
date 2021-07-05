@@ -31,35 +31,15 @@ class GithubAuth extends Visa {
           if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
-          final String baseProfileUrlString = 'https://api.github.com/user';
-          final Uri profileUrl = Uri.parse(baseProfileUrlString);
-          final Uri emailUrl = Uri.parse('$baseProfileUrlString/emails');
+          final String baseProfileUrl = 'https://api.github.com/user';
           final Map<String, String> headers = {'Authorization': 'token $token'};
-
-          final http.Response profileResponse =
-              await http.get(profileUrl, headers: headers);
           final Map<String, dynamic> profileJson =
-              json.decode(profileResponse.body);
-          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
+              await _getProfile(baseProfileUrl, headers);
+          final Map<String, dynamic> emailJson =
+              await _getEmail(baseProfileUrl, headers);
 
-          final http.Response emailResponse =
-              await http.get(emailUrl, headers: headers);
-          final List<dynamic> emailJson = json.decode(emailResponse.body);
-          if (debugMode)
-            _debug.info(
-                'In GithubAuth -> Returned Email Response: ${emailResponse.body}');
-
-          String emailString;
-
-          for (var email in emailJson) {
-            if (email['primary']) {
-              emailString = email['email'];
-              break;
-            }
-          }
-
-          profileJson['email'] = emailString;
-          profileJson['emails'] = emailJson;
+          profileJson['email'] = emailJson['email'];
+          profileJson['emails'] = emailJson['emails'];
 
           if (debugMode) _debug.info('Modified Profile Json: $profileJson');
           return authData(profileJson, oauthData);
@@ -77,6 +57,8 @@ class GithubAuth extends Visa {
         clientID: oauthData[OAuth.CLIENT_ID_KEY],
         accessToken: accessToken,
         userID: profileJson['id'].toString(),
+        firstName: profileJson['first_name'],
+        lastName: profileJson['last_name'],
         email: profileJson['email'],
         profileImgUrl: profileJson['avatar_url'],
         response: oauthData,
@@ -111,5 +93,53 @@ class GithubAuth extends Visa {
     oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
     oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
     oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+  }
+
+  /// Get's a user's Github profile data and
+  /// isolates the first and last name.
+  /// [baseProfileUrl] - Github base user api url
+  /// [headers] - request header with auth token
+  Future<Map<String, dynamic>> _getProfile(
+      String baseProfileUrl, Map<String, String> headers) async {
+    final Uri profileUrl = Uri.parse(baseProfileUrl);
+    final http.Response profileResponse =
+        await http.get(profileUrl, headers: headers);
+    final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
+
+    if (debugMode) _debug.info('Returned Profile Json: $profileJson');
+
+    if (profileJson['name'] != null){
+      final List<String> name = profileJson['name'].split(' ');
+      profileJson['first_name'] = name[0];
+      profileJson['last_name'] = name[1];
+    }
+
+    return profileJson;
+  }
+
+  /// Get's a user's Github email data and
+  /// isolates the primary email address.
+  /// [baseProfileUrl] - Github base user api url
+  /// [headers] - request header with auth token
+  Future<Map<String, dynamic>> _getEmail(
+      String baseProfileUrl, Map<String, String> headers) async {
+    final Uri emailUrl = Uri.parse('$baseProfileUrl/emails');
+    final http.Response emailResponse =
+        await http.get(emailUrl, headers: headers);
+    final List<dynamic> emailJson = json.decode(emailResponse.body);
+    if (debugMode)
+      _debug.info(
+          'In GithubAuth -> Returned Email Response: ${emailResponse.body}');
+
+    String email;
+
+    for (var _email in emailJson) {
+      if (_email['primary']) {
+        email = _email['email'];
+        break;
+      }
+    }
+
+    return {'email': email, 'emails': emailJson};
   }
 }
