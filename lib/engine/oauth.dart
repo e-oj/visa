@@ -52,8 +52,8 @@ class OAuth {
         '&response_type=${responseType == null ? 'token' : responseType}';
     String otherParams = '';
 
-    if(otherQueryParams != null){
-      for (String key in otherQueryParams.keys){
+    if (otherQueryParams != null) {
+      for (String key in otherQueryParams.keys) {
         otherParams += '&$key=${otherQueryParams[key]}';
       }
     }

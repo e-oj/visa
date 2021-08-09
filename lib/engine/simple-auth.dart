@@ -15,7 +15,10 @@ class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
   SimpleAuth(
-      {@required this.baseUrl, @required this.getAuthData, this.responseType, this.otherQueryParams});
+      {@required this.baseUrl,
+      @required this.getAuthData,
+      this.responseType,
+      this.otherQueryParams});
 
   final String baseUrl; // OAuth base url
   final String responseType;
