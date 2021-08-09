@@ -17,3 +17,7 @@
 * Compatible with Flutter 2
 * Added LinkedIn and Spotify
 * Added Google branding
+
+## [2.0.1] - 8/9/20
+* dartfmt oauth.dart
+* dartfmt simple-auth.dart
