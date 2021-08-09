@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Discord [OAuth] authentication
 class DiscordAuth extends Visa {
   final baseUrl = 'https://discord.com/api/oauth2/authorize';
+  final Debug _debug = Debug(prefix: 'In DiscordAuth ->');
 
   @override
   SimpleAuth visa;
@@ -21,18 +22,20 @@ class DiscordAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In DiscordAuth -> OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
-          var token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In DiscordAuth -> OAuth token: $token');
+          final String token = oauthData[OAuth.TOKEN_KEY];
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
-          var baseProfileUrl = 'https://discord.com/api/users/@me';
-          var profileResponse = await http.get(baseProfileUrl, headers: {
+          final Uri profileUrl = Uri.parse('https://discord.com/api/users/@me');
+          final http.Response profileResponse =
+              await http.get(profileUrl, headers: {
             'Authorization': 'Bearer $token',
           });
-          var profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In DiscordAuth -> Returned Profile Json: $profileJson');
+          final Map<String, dynamic> profileJson =
+              json.decode(profileResponse.body);
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
@@ -42,7 +45,8 @@ class DiscordAuth extends Visa {
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
   @override
-  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+  AuthData authData(
+      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
     final String userId = profileJson['id'] as String;
     final String avatar = profileJson['avatar'] as String;

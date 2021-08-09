@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Discord [OAuth] authentication
 class TwitchAuth extends Visa {
   final baseUrl = 'https://id.twitch.tv/oauth2/authorize';
+  final Debug _debug = Debug(prefix: 'In TwitchAuth ->');
 
   @override
   SimpleAuth visa;
@@ -21,19 +22,22 @@ class TwitchAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In TwitchAuth -> OAuth Data: $oauthData');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
 
-          var token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In TwitchAuth -> OAuth token: $token');
-          
+          final String token = oauthData[OAuth.TOKEN_KEY];
+          if (debugMode) _debug.info('OAuth token: $token');
+
           // User profile API endpoint.
-          var baseProfileUrl = 'https://api.twitch.tv/helix/users';
-          var profileResponse = await http.get(baseProfileUrl, headers: {
-            'Authorization': 'Bearer $token',
-            'Client-Id': oauthData['clientID']
-          });
-          var profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In TwitchAuth -> Returned Profile Json: $profileJson');
+          final Uri baseProfileUrl =
+              Uri.parse('https://api.twitch.tv/helix/users');
+          final http.Response profileResponse = await http.get(baseProfileUrl,
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Client-Id': oauthData['clientID']
+              });
+          final Map<String, dynamic> profileJson =
+              json.decode(profileResponse.body);
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
@@ -42,9 +46,10 @@ class TwitchAuth extends Visa {
   /// This function combines information
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
-  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+  AuthData authData(
+      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
-    Map<String, dynamic> user = profileJson['data'][0];
+    final Map<String, dynamic> user = profileJson['data'][0];
 
     return AuthData(
         clientID: oauthData['clientID'],

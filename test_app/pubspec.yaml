@@ -23,8 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hexcolor: ^1.0.4
-  webview_flutter: ^1.0.7
+  hexcolor: ^2.0.3
+  webview_flutter: ^2.0.4
   visa:
     path: ../
 

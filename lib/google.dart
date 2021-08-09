@@ -10,6 +10,7 @@ import 'engine/oauth.dart';
 /// Enables Google [OAuth] authentication
 class GoogleAuth extends Visa {
   final baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+  final Debug _debug = Debug(prefix: 'In GoogleAuth ->');
   String personFields;
 
   @override
@@ -24,19 +25,22 @@ class GoogleAuth extends Visa {
         /// Sends a request to the user profile api
         /// endpoint. Returns an AuthData object.
         getAuthData: (Map<String, String> oauthData) async {
-          if (debugMode) debug('In GoogleAuth -> OAuth Data: $oauthData');
-          
-          var token = oauthData[OAuth.TOKEN_KEY];
-          if (debugMode) debug('In GoogleAuth -> OAuth token: $token');
+          if (debugMode) _debug.info('OAuth Data: $oauthData');
+
+          final String token = oauthData[OAuth.TOKEN_KEY];
+          if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
-          var baseProfileUrl = 'https://people.googleapis.com/v1/people/me';
-          var profileUrl = '$baseProfileUrl?personFields=$personFields';
+          final String baseProfileUrl =
+              'https://people.googleapis.com/v1/people/me';
+          final Uri profileUrl =
+              Uri.parse('$baseProfileUrl?personFields=$personFields');
 
-          var profileResponse = await http
+          final http.Response profileResponse = await http
               .get(profileUrl, headers: {'Authorization': 'Bearer $token'});
-          var profileJson = json.decode(profileResponse.body);
-          if (debugMode) debug('In GoogleAuth -> Returned Profile Json: $profileJson');
+          final Map<String, dynamic> profileJson =
+              json.decode(profileResponse.body);
+          if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
           return authData(profileJson, oauthData);
         });
@@ -45,7 +49,8 @@ class GoogleAuth extends Visa {
   /// This function combines information
   /// from the user [profileJson] and auth response [oauthData]
   /// to build an [AuthData] object.
-  AuthData authData(Map<String, dynamic> profileJson, Map<String, String> oauthData) {
+  AuthData authData(
+      Map<String, dynamic> profileJson, Map<String, String> oauthData) {
     final String accessToken = oauthData[OAuth.TOKEN_KEY];
 
     return AuthData(
@@ -63,8 +68,8 @@ class GoogleAuth extends Visa {
   /// Merges the provided personFields with
   /// the default personFields.
   _getPersonFields(String fields) {
-    Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
-    Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
+    final Set inputFields = Set.from(fields.split(RegExp('[ ,]')));
+    final Set defaultFields = {'names', 'emailAddresses', 'metadata', 'photos'};
 
     defaultFields.addAll(inputFields);
 

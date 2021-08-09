@@ -12,7 +12,7 @@ abstract class Visa {
 
   /// Sets debugMode and visa.debugMode
   /// to the given value (debugMode)
-  set debug(bool debugMode){
+  set debug(bool debugMode) {
     this.debugMode = debugMode;
     this.visa.debugMode = debugMode;
   }

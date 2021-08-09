@@ -9,6 +9,8 @@ import 'package:visa/discord.dart';
 import 'package:visa/twitch.dart';
 import 'package:visa/github.dart';
 import 'package:visa/google.dart';
+import 'package:visa/linkedin.dart';
+import 'package:visa/spotify.dart';
 
 import 'utils.dart';
 
@@ -16,6 +18,7 @@ class AuthPage extends StatelessWidget {
   AuthPage({Key key, @required this.thirdParty}) : super(key: key);
 
   final String thirdParty;
+  final Debug _debug = Debug(prefix: 'In AuthPage ->');
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +32,8 @@ class AuthPage extends StatelessWidget {
 
   WebView _getThirdPartyAuth(context) {
     done(AuthData authData) {
-      debug('Authentication Complete!');
-      debug('Data Gathered During Authentication: $authData');
+      _debug.info('Authentication Complete!');
+      _debug.info('Data Gathered During Authentication: $authData');
 
       Navigator.pushReplacementNamed(context, '/complete-profile',
           arguments: authData);
@@ -41,9 +44,19 @@ class AuthPage extends StatelessWidget {
     var googleAuth = GoogleAuth();
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
-    List<Visa> allProviders = [fbAuth, discordAuth, googleAuth, twitchAuth, githubAuth];
+    var linkedInAuth = LinkedInAuth();
+    var spotifyAuth = SpotifyAuth();
+    List<Visa> allProviders = [
+      fbAuth,
+      discordAuth,
+      googleAuth,
+      twitchAuth,
+      githubAuth,
+      linkedInAuth,
+      spotifyAuth
+    ];
 
-    for (var provider in allProviders){
+    for (var provider in allProviders) {
       provider.debug = true;
     }
 
@@ -89,6 +102,24 @@ class AuthPage extends StatelessWidget {
             state: 'googleAuth',
             scope: 'https://www.googleapis.com/auth/user.emails.read '
                 'https://www.googleapis.com/auth/userinfo.profile',
+            onDone: done);
+
+      case 'linkedIn':
+        return linkedInAuth.visa.authenticate(
+            clientID: '78lyweifjuavwi',
+            clientSecret: 'SbUU4yfIdEghTeb8',
+            redirectUri: 'https://www.e-oj.com/oauth',
+            state: 'linkedInAuth',
+            scope: 'r_liteprofile r_emailaddress',
+            onDone: done);
+
+      case 'spotify':
+        return spotifyAuth.visa.authenticate(
+            clientID: '5c711cec6f9740fc9b91cca9461cefb8',
+            clientSecret: '8fd2691a84364c8ea30e31e1198c327e',
+            redirectUri: 'https://www.e-oj.com/oauth',
+            state: 'spotifyAuth',
+            scope: 'user-read-email user-read-private',
             onDone: done);
       default:
         return null;

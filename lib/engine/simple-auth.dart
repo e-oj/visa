@@ -14,9 +14,12 @@ import 'oauth.dart';
 class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
-  SimpleAuth({@required this.baseUrl, @required this.getAuthData});
+  SimpleAuth(
+      {@required this.baseUrl, @required this.getAuthData, this.responseType, this.otherQueryParams});
 
   final String baseUrl; // OAuth base url
+  final String responseType;
+  final Map<String, String> otherQueryParams;
 
   /// This function makes the necessary api calls to
   /// get a user's profile data. It accepts a single
@@ -31,6 +34,7 @@ class SimpleAuth {
 
   /// Debug mode?
   bool debugMode = false;
+  final Debug _debug = Debug(prefix: 'In SimpleAuth ->');
 
   /// Creates an [OAuth] instance with the
   /// provided credentials. Returns a WebView
@@ -46,19 +50,27 @@ class SimpleAuth {
     final OAuth oAuth = OAuth(
         baseUrl: baseUrl,
         clientID: clientID,
+        clientSecret: clientSecret,
         redirectUri: redirectUri,
         state: state,
         scope: scope,
-        clientSecret: clientSecret,
+        responseType: responseType,
+        otherQueryParams: otherQueryParams,
         debugMode: debugMode);
 
     return oAuth.authenticate(
         clearCache: newSession,
         onDone: (responseData) async {
-          if (debugMode) debug('In SimpleAuth -> Response: $responseData');
+          if (debugMode) _debug.info('Response: $responseData');
 
-          AuthData authData = await getAuthData(responseData);
-          if (debugMode) debug('In SimpleAuth -> Returned Authentication Data: $authData');
+          final String token = responseData[OAuth.TOKEN_KEY];
+          final String code = responseData[OAuth.CODE_KEY];
+
+          AuthData authData = token == null && code == null
+              ? AuthData(response: responseData)
+              : await getAuthData(responseData);
+
+          if (debugMode) _debug.info('Returned Authentication Data: $authData');
 
           onDone(authData);
         });
