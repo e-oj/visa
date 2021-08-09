@@ -36,7 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     Utils.getButton(
                         text: 'Sign up with Google',
                         color: Colors.white,
-                        textColor: HexColor('#4285F4'),
+                        textColor: HexColor('#4D4D4D'),
                         icon:
                         Image.asset('assets/google.png', width: iconWidth),
                         onPressed: () =>
