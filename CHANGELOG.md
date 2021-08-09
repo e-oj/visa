@@ -11,4 +11,9 @@
 
 ## [1.0.4] - 12/25/20
 * Added debug mode
-* Refactored 
+* Refactored
+
+## [2.0.0] - 8/9/20
+* Compatible with Flutter 2
+* Added LinkedIn and Spotify
+* Added Google branding
