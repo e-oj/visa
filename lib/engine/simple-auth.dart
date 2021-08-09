@@ -15,10 +15,11 @@ class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
   SimpleAuth(
-      {@required this.baseUrl, @required this.getAuthData, this.responseType});
+      {@required this.baseUrl, @required this.getAuthData, this.responseType, this.otherQueryParams});
 
   final String baseUrl; // OAuth base url
   final String responseType;
+  final Map<String, String> otherQueryParams;
 
   /// This function makes the necessary api calls to
   /// get a user's profile data. It accepts a single
@@ -54,6 +55,7 @@ class SimpleAuth {
         state: state,
         scope: scope,
         responseType: responseType,
+        otherQueryParams: otherQueryParams,
         debugMode: debugMode);
 
     return oAuth.authenticate(

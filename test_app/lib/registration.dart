@@ -68,7 +68,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         color: HexColor('#4285F4'),
                         textColor: Colors.white,
                         onPressed: () =>
-                            Navigator.pushNamed(context, '/linkedin-auth'))
+                            Navigator.pushNamed(context, '/linkedin-auth')),
+                    Utils.getButton(
+                        text: 'Sign up with Spotify',
+                        color: HexColor('#4285F4'),
+                        textColor: Colors.white,
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/spotify-auth'))
                   ])))),
     );
   }

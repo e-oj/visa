@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
           '/google-auth': (BuildContext context) =>
               AuthPage(thirdParty: 'google'),
           '/linkedin-auth': (BuildContext context) =>
-              AuthPage(thirdParty: 'linkedIn')
+              AuthPage(thirdParty: 'linkedIn'),
+          '/spotify-auth': (BuildContext context) =>
+              AuthPage(thirdParty: 'spotify')
         });
   }
 }

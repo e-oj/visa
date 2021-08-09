@@ -10,6 +10,7 @@ import 'package:visa/twitch.dart';
 import 'package:visa/github.dart';
 import 'package:visa/google.dart';
 import 'package:visa/linkedin.dart';
+import 'package:visa/spotify.dart';
 
 import 'utils.dart';
 
@@ -44,13 +45,15 @@ class AuthPage extends StatelessWidget {
     var twitchAuth = TwitchAuth();
     var githubAuth = GithubAuth();
     var linkedInAuth = LinkedInAuth();
+    var spotifyAuth = SpotifyAuth();
     List<Visa> allProviders = [
       fbAuth,
       discordAuth,
       googleAuth,
       twitchAuth,
       githubAuth,
-      linkedInAuth
+      linkedInAuth,
+      spotifyAuth
     ];
 
     for (var provider in allProviders) {
@@ -108,6 +111,15 @@ class AuthPage extends StatelessWidget {
             redirectUri: 'https://www.e-oj.com/oauth',
             state: 'linkedInAuth',
             scope: 'r_liteprofile r_emailaddress',
+            onDone: done);
+
+      case 'spotify':
+        return spotifyAuth.visa.authenticate(
+            clientID: '5c711cec6f9740fc9b91cca9461cefb8',
+            clientSecret: '8fd2691a84364c8ea30e31e1198c327e',
+            redirectUri: 'https://www.e-oj.com/oauth',
+            state: 'spotifyAuth',
+            scope: 'user-read-email user-read-private',
             onDone: done);
       default:
         return null;

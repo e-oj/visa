@@ -8,21 +8,24 @@ import 'auth-data.dart';
 import 'engine/oauth.dart';
 
 /// Enables Github [OAuth] authentication
-class GithubAuth extends Visa {
-  final baseUrl = 'https://github.com/login/oauth/authorize';
-  final Debug _debug = Debug(prefix: 'In GithubAuth ->');
+class SpotifyAuth extends Visa {
+  final baseUrl = 'https://accounts.spotify.com/authorize';
+  final Debug _debug = Debug(prefix: 'In SpotifyAuth ->');
 
   @override
   SimpleAuth visa;
 
-  GithubAuth() {
+  SpotifyAuth() {
     visa = SimpleAuth(
         baseUrl: baseUrl,
+        responseType: 'code',
+        otherQueryParams: {'show_dialog': 'true'},
 
-        /// Github returns a code which can be exchanged
+        /// Spotify returns a code which can be exchanged
         /// for a token. This function gets the token and
-        /// Sends a request to the user profwile api endpoint.
-        /// Returns an AuthData object.
+        /// calls a function which Sends a request to the
+        /// user profile api endpoint. Returns an AuthData
+        /// object.
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) _debug.info('OAuth Data: $oauthData');
 
@@ -30,16 +33,7 @@ class GithubAuth extends Visa {
           final String token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) _debug.info('OAuth token: $token');
 
-          // User profile API endpoint.
-          final String baseProfileUrl = 'https://api.github.com/user';
-          final Map<String, String> headers = {'Authorization': 'token $token'};
-          final Map<String, dynamic> profileJson =
-              await _getProfile(baseProfileUrl, headers);
-          final Map<String, dynamic> emailJson =
-              await _getEmail(baseProfileUrl, headers);
-
-          profileJson['email'] = emailJson['email'];
-          profileJson['emails'] = emailJson['emails'];
+          final Map<String, dynamic> profileJson = await _getProfile(token);
 
           if (debugMode) _debug.info('Modified Profile Json: $profileJson');
           return authData(profileJson, oauthData);
@@ -60,12 +54,12 @@ class GithubAuth extends Visa {
         firstName: profileJson['first_name'],
         lastName: profileJson['last_name'],
         email: profileJson['email'],
-        profileImgUrl: profileJson['avatar_url'],
+        profileImgUrl: profileJson['profile_image'],
         response: oauthData,
         userJson: profileJson);
   }
 
-  /// Github's [OAuth] endpoint returns a code
+  /// Spotify's [OAuth] endpoint returns a code
   /// which can be exchanged for a token. This
   /// function performs the exchange and adds the
   /// returned data to the response [oauthData] map.
@@ -73,73 +67,65 @@ class GithubAuth extends Visa {
     if (debugMode) _debug.info('Exchanging OAuth Code For Token');
 
     final Uri tokenEndpoint =
-        Uri.parse('https://github.com/login/oauth/access_token');
+        Uri.parse('https://accounts.spotify.com/api/token');
     final http.Response tokenResponse =
         await http.post(tokenEndpoint, headers: {
       'Accept': 'application/json',
     }, body: {
+      'grant_type': 'authorization_code',
+      'code': oauthData[OAuth.CODE_KEY],
       'client_id': oauthData[OAuth.CLIENT_ID_KEY],
       'client_secret': oauthData[OAuth.CLIENT_SECRET_KEY],
-      'code': oauthData[OAuth.CODE_KEY],
-      'redirect_uri': oauthData[OAuth.REDIRECT_URI_KEY],
-      'state': oauthData[OAuth.STATE_KEY]
+      'redirect_uri': oauthData[OAuth.REDIRECT_URI_KEY]
     });
 
     if (debugMode) _debug.info('Exchange Successful. Retrieved OAuth Token');
 
     final Map<String, dynamic> responseJson = json.decode(tokenResponse.body);
     final String tokenTypeKey = 'token_type';
+    final String expiryKey = 'expires_in';
+    final String refreshTokenKey = 'refresh_token';
 
     oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY] as String;
     oauthData[OAuth.SCOPE_KEY] = responseJson[OAuth.SCOPE_KEY] as String;
     oauthData[tokenTypeKey] = responseJson[tokenTypeKey] as String;
+    oauthData[expiryKey] = responseJson[expiryKey].toString();
+    oauthData[refreshTokenKey] = responseJson[refreshTokenKey];
   }
 
-  /// Get's a user's Github profile data and
+  /// Get's a user's Spotify profile data and
   /// isolates the first and last name.
-  /// [baseProfileUrl] - Github base user api url
-  /// [headers] - request header with auth token
-  Future<Map<String, dynamic>> _getProfile(
-      String baseProfileUrl, Map<String, String> headers) async {
-    final Uri profileUrl = Uri.parse(baseProfileUrl);
-    final http.Response profileResponse =
+  Future<Map<String, dynamic>> _getProfile(String token) async {
+    // User profile API endpoint.
+    final String profileUrlString = 'https://api.spotify.com/v1/me';
+    final Uri profileUrl = Uri.parse(profileUrlString);
+    final Map<String, String> headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    http.Response profileResponse =
         await http.get(profileUrl, headers: headers);
+
     final Map<String, dynamic> profileJson = json.decode(profileResponse.body);
 
     if (debugMode) _debug.info('Returned Profile Json: $profileJson');
 
-    if (profileJson['name'] != null){
-      final List<String> name = profileJson['name'].split(' ');
-      profileJson['first_name'] = name[0];
-      profileJson['last_name'] = name[1];
-    }
+    final String displayName = profileJson['display_name'];
+    final List<dynamic> images = profileJson['images'];
 
-    return profileJson;
-  }
+    if (displayName != null) {
+      List<String> names = displayName.split(' ');
+      profileJson['first_name'] = names[0];
 
-  /// Get's a user's Github email data and
-  /// isolates the primary email address.
-  /// [baseProfileUrl] - Github base user api url
-  /// [headers] - request header with auth token
-  Future<Map<String, dynamic>> _getEmail(
-      String baseProfileUrl, Map<String, String> headers) async {
-    final Uri emailUrl = Uri.parse('$baseProfileUrl/emails');
-    final http.Response emailResponse =
-        await http.get(emailUrl, headers: headers);
-    final List<dynamic> emailJson = json.decode(emailResponse.body);
-    if (debugMode)
-      _debug.info(
-          'In GithubAuth -> Returned Email Response: ${emailResponse.body}');
-
-    String email;
-
-    for (var _email in emailJson) {
-      if (_email['primary']) {
-        email = _email['email'];
-        break;
+      if (names.length > 1) {
+        profileJson['last_name'] = names[names.length - 1];
       }
     }
 
-    return {'email': email, 'emails': emailJson};
+    if (images != null && images.length > 0) {
+      profileJson['profile_image'] = images[0]['url'];
+    }
+
+    return profileJson;
   }
 }
