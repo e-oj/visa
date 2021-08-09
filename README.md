@@ -152,3 +152,4 @@ fbAuth.debug = true;
   * [Authenticate](#step-2---authenticate)
   * [Use AuthData](#step-3---use-authdata)
   * [Rejoice!](#step-4---rejoice)
+- [Debugging](#debugging)
