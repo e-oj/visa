@@ -92,8 +92,6 @@ class LinkedInAuth extends Visa {
     final Map<String, dynamic> responseJson = json.decode(tokenResponse.body);
     final String expiryKey = 'expires_in';
 
-    _debug.info('Token Response: ${tokenResponse.body}');
-
     oauthData[OAuth.TOKEN_KEY] = responseJson[OAuth.TOKEN_KEY];
     oauthData[expiryKey] = responseJson[expiryKey].toString();
   }
