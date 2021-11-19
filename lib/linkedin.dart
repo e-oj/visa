@@ -7,7 +7,7 @@ import 'engine/visa.dart';
 import 'auth-data.dart';
 import 'engine/oauth.dart';
 
-/// Enables Github [OAuth] authentication
+/// Enables LinkedIn [OAuth] authentication
 class LinkedInAuth extends Visa {
   final baseUrl = 'https://www.linkedin.com/oauth/v2/authorization';
   final Debug _debug = Debug(prefix: 'In LinkedInAuth ->');
@@ -20,7 +20,7 @@ class LinkedInAuth extends Visa {
         baseUrl: baseUrl,
         responseType: 'code',
 
-        /// Github returns a code which can be exchanged
+        /// LinkedIn returns a code which can be exchanged
         /// for a token. This function gets the token and
         /// Sends a request to the user profile api endpoint.
         /// Returns an AuthData object.
@@ -66,7 +66,7 @@ class LinkedInAuth extends Visa {
         userJson: profileJson);
   }
 
-  /// Github's [OAuth] endpoint returns a code
+  /// LinkedIn's [OAuth] endpoint returns a code
   /// which can be exchanged for a token. This
   /// function performs the exchange and adds the
   /// returned data to the response [oauthData] map.
