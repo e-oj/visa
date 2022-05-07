@@ -3,10 +3,14 @@ import '../app-scale.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ImageDisplay extends StatefulWidget {
-  ImageDisplay({Key key, this.height, this.margin, this.imageUrl})
+  ImageDisplay(
+      {Key? key,
+      required this.height,
+      this.margin = const EdgeInsets.all(0),
+      this.imageUrl})
       : super(key: key);
 
-  final String imageUrl;
+  final String? imageUrl;
   final double height;
   final EdgeInsets margin;
 
@@ -17,12 +21,12 @@ class ImageDisplay extends StatefulWidget {
 }
 
 class _ImageDisplayState extends State<ImageDisplay> {
-  _ImageDisplayState(this.height, this.margin, {this.imageUrl});
+  _ImageDisplayState(this.height, this.margin, {required this.imageUrl});
 
-  String imageUrl;
+  String? imageUrl;
   double height;
   EdgeInsets margin;
-  String imgPath;
+  String? imgPath;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
         decoration: BoxDecoration(
           image: imageUrl != null
               ? DecorationImage(
-                  image: NetworkImage(imageUrl), fit: BoxFit.cover)
+                  image: NetworkImage(imageUrl!), fit: BoxFit.cover)
               : null,
           borderRadius: BorderRadius.all(Radius.circular(500)),
           color: HexColor('#f2f2f2'),

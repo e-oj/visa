@@ -15,14 +15,14 @@ class SimpleAuth {
   /// Creates a new instance based on the given OAuth
   /// baseUrl and getAuthData function.
   SimpleAuth(
-      {@required this.baseUrl,
-      @required this.getAuthData,
+      {required this.baseUrl,
+      required this.getAuthData,
       this.responseType,
       this.otherQueryParams});
 
   final String baseUrl; // OAuth base url
-  final String responseType;
-  final Map<String, String> otherQueryParams;
+  final String? responseType;
+  final Map<String, String>? otherQueryParams;
 
   /// This function makes the necessary api calls to
   /// get a user's profile data. It accepts a single
@@ -43,12 +43,12 @@ class SimpleAuth {
   /// provided credentials. Returns a WebView
   /// That's been set up for authentication
   WebView authenticate(
-      {@required String clientID,
-      String clientSecret,
-      @required String redirectUri,
-      @required String state,
-      @required String scope,
-      @required Function onDone,
+      {required String clientID,
+      String? clientSecret,
+      required String redirectUri,
+      required String state,
+      required String scope,
+      required Function onDone,
       bool newSession = false}) {
     final OAuth oAuth = OAuth(
         baseUrl: baseUrl,
@@ -65,9 +65,8 @@ class SimpleAuth {
         clearCache: newSession,
         onDone: (responseData) async {
           if (debugMode) _debug.info('Response: $responseData');
-
-          final String token = responseData[OAuth.TOKEN_KEY];
-          final String code = responseData[OAuth.CODE_KEY];
+          final String? token = responseData[OAuth.TOKEN_KEY];
+          final String? code = responseData[OAuth.CODE_KEY];
 
           AuthData authData = token == null && code == null
               ? AuthData(response: responseData)

@@ -3,14 +3,14 @@ import '../app-scale.dart';
 
 class CustomButton extends StatelessWidget {
   CustomButton(
-      {Key key,
-      @required this.text,
-      @required this.onPressed,
-      this.width,
-      this.height,
-      this.color,
-      this.textColor,
-      this.icon})
+      {Key? key,
+      required this.text,
+      required this.onPressed,
+      required this.width,
+      required this.height,
+      required this.color,
+      required this.textColor,
+      required this.icon})
       : super(key: key);
 
   final double width;
