@@ -5,7 +5,7 @@ import 'simple-auth.dart';
 /// Visa abstract class
 abstract class Visa {
   /// a [SimpleAuth] instance
-  SimpleAuth visa;
+  late SimpleAuth visa;
 
   /// Debug mode?
   bool debugMode = false;

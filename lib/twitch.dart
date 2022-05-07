@@ -13,7 +13,7 @@ class TwitchAuth extends Visa {
   final Debug _debug = Debug(prefix: 'In TwitchAuth ->');
 
   @override
-  SimpleAuth visa;
+  late SimpleAuth visa;
 
   TwitchAuth() {
     visa = SimpleAuth(
@@ -24,17 +24,17 @@ class TwitchAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) _debug.info('OAuth Data: $oauthData');
 
-          final String token = oauthData[OAuth.TOKEN_KEY];
+          final String? token = oauthData[OAuth.TOKEN_KEY];
           if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
           final Uri baseProfileUrl =
               Uri.parse('https://api.twitch.tv/helix/users');
-          final http.Response profileResponse = await http.get(baseProfileUrl,
-              headers: {
-                'Authorization': 'Bearer $token',
-                'Client-Id': oauthData['clientID']
-              });
+          final http.Response profileResponse =
+              await http.get(baseProfileUrl, headers: {
+            'Authorization': 'Bearer $token',
+            'Client-Id': oauthData['clientID'] ?? 'null',
+          });
           final Map<String, dynamic> profileJson =
               json.decode(profileResponse.body);
           if (debugMode) _debug.info('Returned Profile Json: $profileJson');
@@ -48,7 +48,7 @@ class TwitchAuth extends Visa {
   /// to build an [AuthData] object.
   AuthData authData(
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    final String accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String? accessToken = oauthData[OAuth.TOKEN_KEY];
     final Map<String, dynamic> user = profileJson['data'][0];
 
     return AuthData(

@@ -19,27 +19,29 @@ class AuthData {
     this.response,
   });
 
-  final String userID; // User's profile id
-  final String clientID; // OAuth client id
-  final String accessToken; // OAuth access token
-  final String firstName; // User's first name
-  final String lastName; // User's last name
-  final String email; // User's email
-  final String profileImgUrl; // User's profile image url
-  final Map<String, dynamic> userJson; // Full returned user json
-  final Map<String, String> response; // Full returned auth response.
+  final String? userID; // User's profile id
+  final String? clientID; // OAuth client id
+  final String? accessToken; // OAuth access token
+  final String? firstName; // User's first name
+  final String? lastName; // User's last name
+  final String? email; // User's email
+  final String? profileImgUrl; // User's profile image url
+  final Map<String, dynamic>? userJson; // Full returned user json
+  final Map<String, String>? response; // Full returned auth response.
 
   /// Creates a formatted string from
   /// the response data.
   String _formatResponse() {
     StringBuffer result = StringBuffer('\n');
 
-    for (MapEntry data in response.entries) {
-      result.write('\t\t\t\t');
-      result.write(data.key);
-      result.write(' = ');
-      result.write(data.value);
-      result.write('\n');
+    if (response != null) {
+      for (MapEntry data in response!.entries) {
+        result.write('\t\t\t\t');
+        result.write(data.key);
+        result.write(' = ');
+        result.write(data.value);
+        result.write('\n');
+      }
     }
 
     return result.toString();

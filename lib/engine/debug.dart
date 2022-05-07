@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Debug {
-  Debug({@required this.prefix});
+  Debug({required this.prefix});
 
   String prefix;
 
