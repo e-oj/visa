@@ -25,8 +25,9 @@ class CustomButton extends StatelessWidget {
     double width = this.width;
     double height = this.height;
     AppScale scale = AppScale(context);
+    ButtonStyle buttonStyle = ElevatedButton.styleFrom(backgroundColor: color);
     Text text =
-        Text(this.text, style: TextStyle(fontSize: scale.ofHeight(0.019)));
+        Text(this.text, style: TextStyle(fontSize: scale.ofHeight(0.019), color: textColor));
 
     if (this.width != null && this.width <= 1) {
       width = scale.ofWidth(this.width);
@@ -40,10 +41,8 @@ class CustomButton extends StatelessWidget {
         width: width,
         height: height,
         margin: EdgeInsets.all(scale.ofHeight(0.011)),
-        child: RaisedButton(
-          // borderSide: BorderSide(color: Colors.white),
-          color: color,
-          textColor: textColor,
+        child: ElevatedButton(
+          style: buttonStyle,
           child: icon == null
               ? text
               : Row(
