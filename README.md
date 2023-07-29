@@ -137,7 +137,7 @@ You have successfully implemented third party auth in your app! you're one step 
 ## Debugging
 To get debug logs printed to the console, simply set the debug parameter on a provider to ```true```. Like this:
 ```dart
-var fbAuth = FacebookAuth()
+var fbAuth = FacebookAuth();
 fbAuth.debug = true;
 ```
 

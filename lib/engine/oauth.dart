@@ -10,24 +10,24 @@ import 'package:webview_flutter/webview_flutter.dart';
 /// for OAuth 2.0 Authentication.
 class OAuth {
   OAuth(
-      {@required this.baseUrl,
-      @required this.clientID,
-      @required this.redirectUri,
-      @required this.state,
-      @required this.scope,
-      @required this.debugMode,
+      {required this.baseUrl,
+      required this.clientID,
+      required this.redirectUri,
+      required this.state,
+      required this.scope,
+      required this.debugMode,
       this.clientSecret,
       this.responseType,
       this.otherQueryParams});
 
   final String baseUrl; // OAuth url
   final String clientID; // OAuth clientID
-  final String clientSecret; // OAuth clientSecret
-  final String responseType; // OAuth clientSecret
+  final String? clientSecret; // OAuth clientSecret
+  final String? responseType; // OAuth clientSecret
   final String redirectUri; // OAuth redirectUri
   final String state; // OAuth state
   final String scope; // OAuth scope
-  final Map<String, String> otherQueryParams;
+  final Map<String, String>? otherQueryParams;
   final bool debugMode; // Debug mode?
   static const String TOKEN_KEY = 'access_token'; // OAuth token key
   static const String CODE_KEY = 'code'; // OAuth code key
@@ -45,7 +45,7 @@ class OAuth {
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
   /// completed successfully.
-  WebView authenticate({@required Function onDone, bool clearCache = false}) {
+  WebView authenticate({required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
     String responseTypeQuery =
