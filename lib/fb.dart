@@ -13,7 +13,7 @@ class FacebookAuth extends Visa {
   final Debug _debug = Debug(prefix: 'In FacebookAuth ->');
 
   @override
-  SimpleAuth visa;
+  late SimpleAuth visa;
 
   FacebookAuth() {
     visa = SimpleAuth(
@@ -24,7 +24,7 @@ class FacebookAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) _debug.info('OAuth Data: $oauthData');
 
-          final String token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY]!;
           if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
@@ -47,7 +47,7 @@ class FacebookAuth extends Visa {
   /// to build an [AuthData] object.
   @override
   AuthData authData(Map<String, dynamic> json, Map<String, String> data) {
-    final String accessToken = data[OAuth.TOKEN_KEY];
+    final String accessToken = data[OAuth.TOKEN_KEY]!;
     final String profileImgUrl = 'https://graph.facebook.com/me/picture'
         '?type=large'
         '&access_token=$accessToken';
