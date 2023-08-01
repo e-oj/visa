@@ -5,13 +5,13 @@ import 'app-scale.dart';
 
 class Utils {
   static getButton(
-      {@required String text,
-      @required VoidCallback onPressed,
-      double width: 0.75,
-      double height: 0.055,
-      Color color,
-      Color textColor,
-      Widget icon}) {
+      {required String text,
+      required VoidCallback onPressed,
+      double width = 0.75,
+      double height = 0.055,
+      required Color color,
+      required Color textColor,
+      Widget? icon}) {
     return CustomButton(
         text: text,
         onPressed: onPressed,
