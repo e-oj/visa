@@ -13,7 +13,7 @@ class GithubAuth extends Visa {
   final Debug _debug = Debug(prefix: 'In GithubAuth ->');
 
   @override
-  SimpleAuth visa;
+  late SimpleAuth visa;
 
   GithubAuth() {
     visa = SimpleAuth(
@@ -27,7 +27,7 @@ class GithubAuth extends Visa {
           if (debugMode) _debug.info('OAuth Data: $oauthData');
 
           await _getToken(oauthData);
-          final String token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY]!;
           if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
@@ -51,7 +51,7 @@ class GithubAuth extends Visa {
   /// to build an [AuthData] object.
   AuthData authData(
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    final String accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String accessToken = oauthData[OAuth.TOKEN_KEY]!;
 
     return AuthData(
         clientID: oauthData[OAuth.CLIENT_ID_KEY],
@@ -131,7 +131,7 @@ class GithubAuth extends Visa {
       _debug.info(
           'In GithubAuth -> Returned Email Response: ${emailResponse.body}');
 
-    String email;
+    late String email;
 
     for (var _email in emailJson) {
       if (_email['primary']) {
