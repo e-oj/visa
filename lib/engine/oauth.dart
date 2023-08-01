@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:visa/engine/debug.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -45,7 +43,7 @@ class OAuth {
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
   /// completed successfully.
-  WebView authenticate({required Function onDone, bool clearCache = false}) {
+  Future<WebViewWidget> authenticate({required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
     String responseTypeQuery =
@@ -53,8 +51,8 @@ class OAuth {
     String otherParams = '';
 
     if (otherQueryParams != null) {
-      for (String key in otherQueryParams.keys) {
-        otherParams += '&$key=${otherQueryParams[key]}';
+      for (String key in otherQueryParams!.keys) {
+        otherParams += '&$key=${otherQueryParams![key]}';
       }
     }
 
@@ -67,29 +65,28 @@ class OAuth {
         '$responseTypeQuery'
         '$otherParams';
 
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    return getWebViewWidget(authUrl, onDone);
+  }
 
-    return WebView(
-        onWebViewCreated: (controller) async {
-          if (clearCache) {
-            if (debugMode) _debug.info('Clearing Cache and Cookies...');
-            CookieManager cookieManager = CookieManager();
+  Future<WebViewWidget> getWebViewWidget(String url, Function onDone) async {
+    WebViewController controller =  WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(_getNavigationDelegate(onDone))
+      ..setUserAgent(userAgent)
+      ..loadRequest(Uri.parse(url));
 
-            await cookieManager.clearCookies();
-            await controller.clearCache();
-          }
-        },
-        userAgent: userAgent,
-        initialUrl: authUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        navigationDelegate: _getNavigationDelegate(onDone));
+    WebViewCookieManager cookieManager = new WebViewCookieManager();
+    await cookieManager.clearCookies();
+    await controller.clearCache();
+
+    return WebViewWidget(controller: controller);
   }
 
   /// Returns a navigation delegate that attempts
   /// to match the redirect url whenever the browser
   /// navigates to a new page. Once the redirect url
   /// is found, it calls the [onDone] callback.
-  _getNavigationDelegate(onDone) => (NavigationRequest request) {
+  _getNavigationDelegate(Function onDone) => (NavigationRequest request) {
         String url = request.url;
 
         if (debugMode) _debug.info('Inspecting Url Before Loading: $url');
@@ -103,7 +100,7 @@ class OAuth {
           returnedData[STATE_KEY] = state;
 
           if (clientSecret != null) {
-            returnedData[CLIENT_SECRET_KEY] = clientSecret;
+            returnedData[CLIENT_SECRET_KEY] = clientSecret!;
           }
 
           onDone(returnedData);
