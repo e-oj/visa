@@ -13,7 +13,7 @@ class DiscordAuth extends Visa {
   final Debug _debug = Debug(prefix: 'In DiscordAuth ->');
 
   @override
-  SimpleAuth visa;
+  late SimpleAuth visa;
 
   DiscordAuth() {
     visa = SimpleAuth(
@@ -24,7 +24,7 @@ class DiscordAuth extends Visa {
         getAuthData: (Map<String, String> oauthData) async {
           if (debugMode) _debug.info('OAuth Data: $oauthData');
 
-          final String token = oauthData[OAuth.TOKEN_KEY];
+          final String token = oauthData[OAuth.TOKEN_KEY]!;
           if (debugMode) _debug.info('OAuth token: $token');
 
           // User profile API endpoint.
@@ -47,7 +47,7 @@ class DiscordAuth extends Visa {
   @override
   AuthData authData(
       Map<String, dynamic> profileJson, Map<String, String> oauthData) {
-    final String accessToken = oauthData[OAuth.TOKEN_KEY];
+    final String accessToken = oauthData[OAuth.TOKEN_KEY]!;
     final String userId = profileJson['id'] as String;
     final String avatar = profileJson['avatar'] as String;
     final String profileImgUrl = 'https://cdn.discordapp.com/'
