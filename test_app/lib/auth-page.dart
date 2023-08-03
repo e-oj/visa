@@ -15,14 +15,14 @@ import 'package:visa/spotify.dart';
 import 'utils.dart';
 
 class AuthPage extends StatelessWidget {
-  AuthPage({Key key, @required this.thirdParty}) : super(key: key);
+  AuthPage({Key? key, required this.thirdParty}) : super(key: key);
 
   final String thirdParty;
   final Debug _debug = Debug(prefix: 'In AuthPage ->');
 
   @override
   Widget build(BuildContext context) {
-    WebView authenticate = _getThirdPartyAuth(context);
+    WebViewWidget? authenticate = _getThirdPartyAuth(context);
 
     return Scaffold(
       appBar: Utils.getAppBar(context),
@@ -30,7 +30,7 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-  WebView _getThirdPartyAuth(context) {
+  WebViewWidget? _getThirdPartyAuth(context) {
     done(AuthData authData) {
       _debug.info('Authentication Complete!');
       _debug.info('Data Gathered During Authentication: $authData');
