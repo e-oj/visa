@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../app-scale.dart';
 
 class CustomTextField extends StatefulWidget {
-  const CustomTextField(this.label, {Key key, this.width, this.initialValue})
+  const CustomTextField(this.label, {Key? key, this.width, this.initialValue})
       : super(key: key);
 
-  final String initialValue;
+  final String? initialValue;
   final String label;
-  final double width;
+  final double? width;
 
   @override
   _CustomTextFieldState createState() =>
@@ -17,11 +17,11 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   _CustomTextFieldState(this.label, {this.width, this.initialValue});
 
-  final String initialValue;
+  final String? initialValue;
   final String label;
-  final double width;
-  Color labelColor;
-  FocusNode focusNode;
+  final double? width;
+  late Color labelColor;
+  late FocusNode focusNode;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     focusNode = FocusNode();
 
-    focusNode.addListener(() => {changeLabelColor(focusNode)});
+    focusNode.addListener(() => changeLabelColor(focusNode));
   }
 
   @override
