@@ -43,7 +43,7 @@ class OAuth {
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
   /// completed successfully.
-  Future<WebViewWidget> authenticate({required Function onDone, bool clearCache = false}) {
+  WebViewWidget authenticate({required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
     String responseTypeQuery =
@@ -68,7 +68,7 @@ class OAuth {
     return getWebViewWidget(authUrl, onDone);
   }
 
-  Future<WebViewWidget> getWebViewWidget(String url, Function onDone) async {
+  WebViewWidget getWebViewWidget(String url, Function onDone) {
     WebViewController controller =  WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(_getNavigationDelegate(onDone))
@@ -76,8 +76,8 @@ class OAuth {
       ..loadRequest(Uri.parse(url));
 
     WebViewCookieManager cookieManager = new WebViewCookieManager();
-    await cookieManager.clearCookies();
-    await controller.clearCache();
+    cookieManager.clearCookies();
+    controller.clearCache();
 
     return WebViewWidget(controller: controller);
   }

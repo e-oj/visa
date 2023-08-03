@@ -41,7 +41,7 @@ class SimpleAuth {
   /// Creates an [OAuth] instance with the
   /// provided credentials. Returns a WebView
   /// That's been set up for authentication
-  Future<WebViewWidget> authenticate(
+  WebViewWidget authenticate(
       {required String clientID,
       String? clientSecret,
       required String redirectUri,
