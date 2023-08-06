@@ -43,7 +43,8 @@ class OAuth {
   /// Sets up a [WebView] for OAuth authentication.
   /// [onDone] is called when authentication is
   /// completed successfully.
-  WebViewWidget authenticate({required Function onDone, bool clearCache = false}) {
+  WebViewWidget authenticate(
+      {required Function onDone, bool clearCache = false}) {
     String clientSecretQuery =
         clientSecret != null ? '&client_secret=$clientSecret' : '';
     String responseTypeQuery =
@@ -69,7 +70,7 @@ class OAuth {
   }
 
   WebViewWidget getWebViewWidget(String url, Function onDone) {
-    WebViewController controller =  WebViewController()
+    WebViewController controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(_getNavigationDelegate(onDone))
       ..setUserAgent(userAgent)
@@ -86,7 +87,8 @@ class OAuth {
   /// to match the redirect url whenever the browser
   /// navigates to a new page. Once the redirect url
   /// is found, it calls the [onDone] callback.
-  _getNavigationDelegate(Function onDone) => (NavigationRequest request) {
+  _getNavigationDelegate(Function onDone) =>
+      NavigationDelegate(onNavigationRequest: (NavigationRequest request) {
         String url = request.url;
 
         if (debugMode) _debug.info('Inspecting Url Before Loading: $url');
@@ -111,7 +113,7 @@ class OAuth {
         }
 
         return NavigationDecision.navigate;
-      };
+      });
 
   /// Parses url query params into a map
   /// @param url: The url to parse.
