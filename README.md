@@ -32,10 +32,6 @@ import 'package:visa/linkedin.dart';
 import 'package:visa/discord.dart';
 import 'package:visa/twitch.dart';
 import 'package:visa/spotify.dart';
-import 'package:visa/auth-data.dart';
-import 'package:visa/engine/oauth.dart';
-import 'package:visa/engine/simple-auth.dart';
-import 'package:visa/engine/visa.dart';
 ```
 
 ## Basic Usage 
