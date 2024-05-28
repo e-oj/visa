@@ -4,7 +4,7 @@ import 'utils.dart';
 import 'app-scale.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key key}) : super(key: key);
+  const RegistrationPage({Key? key}) : super(key: key);
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -27,6 +27,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       0, scale.ofHeight(0.027), 0, scale.ofHeight(0.027)),
                   child: Column(children: [
                     Utils.getButton(
+                        text: 'Sign up with Discord',
+                        color: HexColor('#7289DA'),
+                        textColor: Colors.white,
+                        icon:
+                            Image.asset('assets/discord.png', width: iconWidth),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/discord-auth')),
+                    Utils.getButton(
                         text: 'Sign up with Facebook',
                         color: HexColor('#4267B2'),
                         textColor: Colors.white,
@@ -38,7 +46,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         color: Colors.white,
                         textColor: HexColor('#4D4D4D'),
                         icon:
-                        Image.asset('assets/google.png', width: iconWidth),
+                            Image.asset('assets/google.png', width: iconWidth),
                         onPressed: () =>
                             Navigator.pushNamed(context, '/google-auth')),
                     Utils.getButton(
@@ -49,14 +57,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             Image.asset('assets/twitch.png', width: iconWidth),
                         onPressed: () =>
                             Navigator.pushNamed(context, '/twitch-auth')),
-                    Utils.getButton(
-                        text: 'Sign up with Discord',
-                        color: HexColor('#7289DA'),
-                        textColor: Colors.white,
-                        icon:
-                            Image.asset('assets/discord.png', width: iconWidth),
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/discord-auth')),
                     Utils.getButton(
                         text: 'Sign up with Github',
                         color: HexColor('#211F1F'),
