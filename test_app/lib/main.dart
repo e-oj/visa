@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/': (BuildContext context) => RegistrationPage(),
           '/complete-profile': (BuildContext context) => AuthResult(),
+          '/discord-auth': (BuildContext context) =>
+              AuthPage(thirdParty: 'discord'),
           '/fb-auth': (BuildContext context) => AuthPage(thirdParty: 'fb'),
           '/twitch-auth': (BuildContext context) =>
               AuthPage(thirdParty: 'twitch'),
-          '/discord-auth': (BuildContext context) =>
-              AuthPage(thirdParty: 'discord'),
           '/github-auth': (BuildContext context) =>
               AuthPage(thirdParty: 'github'),
           '/google-auth': (BuildContext context) =>

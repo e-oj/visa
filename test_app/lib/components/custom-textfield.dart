@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../app-scale.dart';
 
 class CustomTextField extends StatefulWidget {
-  const CustomTextField(this.label, {Key key, this.width, this.initialValue})
+  const CustomTextField(this.label,
+      {Key? key, required this.width, required this.initialValue})
       : super(key: key);
 
   final String initialValue;
@@ -15,13 +16,14 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  _CustomTextFieldState(this.label, {this.width, this.initialValue});
+  _CustomTextFieldState(this.label,
+      {required this.width, required this.initialValue});
 
   final String initialValue;
   final String label;
   final double width;
-  Color labelColor;
-  FocusNode focusNode;
+  late Color labelColor;
+  late FocusNode focusNode;
 
   @override
   void initState() {
